@@ -163,6 +163,17 @@ def _parse_response(raw: dict, tier: ResearchTier) -> ResearchBundle:
             for i, url in enumerate(citations)
         ] if citations else []
 
+        from datetime import datetime, timezone
+        now_iso = datetime.now(timezone.utc).isoformat()
+        sources = [
+            ReportSource(
+                title=f"Source {i+1}",
+                url=url,
+                accessed_at=now_iso,
+            )
+            for i, url in enumerate(citations)
+        ] if citations else []
+
         return ResearchBundle(
             topic="",
             tier=tier,
@@ -170,6 +181,7 @@ def _parse_response(raw: dict, tier: ResearchTier) -> ResearchBundle:
             synthesizedContent=content,
             extractedIOCs=[],
             suggestedTechniques=[],
+            sources=sources,
         )
 
     # Parse structured response
@@ -212,6 +224,20 @@ def _parse_response(raw: dict, tier: ResearchTier) -> ResearchBundle:
         except Exception as e:
             logger.warning("Skipping malformed technique: %s", e)
 
+    # Convert search results to ReportSource objects for bibliography
+    from datetime import datetime, timezone
+    now_iso = datetime.now(timezone.utc).isoformat()
+    sources = [
+        ReportSource(
+            title=sr.title or f"Source {i+1}",
+            url=sr.url,
+            accessed_at=now_iso,
+            snippet=sr.snippet[:200] if sr.snippet else None,
+        )
+        for i, sr in enumerate(search_results)
+        if sr.url
+    ]
+
     return ResearchBundle(
         topic="",
         tier=tier,
@@ -219,6 +245,7 @@ def _parse_response(raw: dict, tier: ResearchTier) -> ResearchBundle:
         synthesizedContent=data.get("synthesized_content", data.get("bluf", content)),
         extractedIOCs=iocs,
         suggestedTechniques=techniques,
+        sources=sources,
     )
 
 
