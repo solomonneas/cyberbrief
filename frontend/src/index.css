@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: #0a0a0f;
+    --color-bg-secondary: #111118;
+    --color-bg-tertiary: #1a1a24;
+    --color-border: #2a2a3a;
+    --color-accent: #00b8e6;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--color-bg-primary);
+  }
+
+  /* Custom scrollbar for dark theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a3a4a;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-lg;
+  }
+
+  .cyber-glow {
+    box-shadow: 0 0 20px rgba(0, 184, 230, 0.15),
+                0 0 40px rgba(0, 184, 230, 0.05);
+  }
+
+  .threat-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .tlp-clear {
+    @apply bg-white/10 text-white border border-white/20;
+  }
+
+  .tlp-green {
+    @apply bg-green-500/10 text-green-400 border border-green-500/20;
+  }
+
+  .tlp-amber {
+    @apply bg-amber-500/10 text-amber-400 border border-amber-500/20;
+  }
+
+  .tlp-amber-strict {
+    @apply bg-orange-500/10 text-orange-400 border border-orange-500/20;
+  }
+
+  .tlp-red {
+    @apply bg-red-500/10 text-red-400 border border-red-500/20;
+  }
+}
