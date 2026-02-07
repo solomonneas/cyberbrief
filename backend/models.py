@@ -122,6 +122,8 @@ class Report(BaseModel):
     iocs: list[IOC] = Field(default_factory=list)
     attack_mapping: list[AttackTechnique] = Field(alias="attackMapping", default_factory=list)
     sources: list[ReportSource] = Field(default_factory=list)
+    footnotes: list[str] = Field(default_factory=list)
+    bibliography: list[str] = Field(default_factory=list)
     confidence_assessments: list[ConfidenceAssessment] = Field(
         alias="confidenceAssessments", default_factory=list
     )

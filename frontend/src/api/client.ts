@@ -73,6 +73,28 @@ class ApiClient {
     });
   }
 
+  async exportHtml(report: Report): Promise<string> {
+    const url = `${API_BASE}/export/html`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(report),
+    });
+
+    if (!response.ok) {
+      let errorDetail = `HTTP ${response.status}`;
+      try {
+        const errorBody: ApiError = await response.json();
+        errorDetail = errorBody.detail || errorDetail;
+      } catch {
+        // response wasn't JSON
+      }
+      throw new Error(errorDetail);
+    }
+
+    return response.text();
+  }
+
   async exportPdf(report: Report): Promise<Blob> {
     const response = await fetch(`${API_BASE}/export/pdf`, {
       method: 'POST',
@@ -84,10 +106,26 @@ class ApiClient {
   }
 
   async exportMarkdown(report: Report): Promise<string> {
-    return this.request<string>('/export/markdown', {
+    const url = `${API_BASE}/export/markdown`;
+    const response = await fetch(url, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(report),
     });
+
+    if (!response.ok) {
+      let errorDetail = `HTTP ${response.status}`;
+      try {
+        const errorBody: ApiError = await response.json();
+        errorDetail = errorBody.detail || errorDetail;
+      } catch {
+        // response wasn't JSON
+      }
+      throw new Error(errorDetail);
+    }
+
+    // Backend returns PlainTextResponse, not JSON
+    return response.text();
   }
 
   async healthCheck(): Promise<{ status: string; version: string }> {
