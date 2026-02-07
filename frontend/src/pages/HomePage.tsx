@@ -60,6 +60,7 @@ export const HomePage: React.FC = () => {
     useResearchStore();
   const {
     setPhase,
+    setProgress,
     setError,
     setCurrentBundle,
     decrementRateLimit,
@@ -83,6 +84,8 @@ export const HomePage: React.FC = () => {
     setPhase('searching', 'Searching for threat intelligence...');
 
     try {
+      // Phase 1: Research
+      setProgress(10, 'Initiating search queries...');
       const bundle = await apiClient.research({
         topic: topic.trim(),
         tier: selectedTier,
@@ -90,10 +93,14 @@ export const HomePage: React.FC = () => {
       });
 
       setCurrentBundle(bundle);
+      setProgress(50, 'Search complete. Synthesizing intelligence...');
       setPhase('generating', 'Generating intelligence report...');
 
+      // Phase 2: Report generation
+      setProgress(60, 'Structuring report sections...');
       const report = await apiClient.generateReport({ bundle });
 
+      setProgress(90, 'Finalizing report...');
       setCurrentReport(report);
       addToHistory(report);
 
@@ -102,7 +109,9 @@ export const HomePage: React.FC = () => {
       }
 
       setPhase('complete', 'Report ready!');
+      setProgress(100, 'Report generated successfully.');
 
+      // Navigate to report view
       const base = variant ? `/${variant}` : '';
       navigate(`${base}/report/${report.id}`);
     } catch (err) {
@@ -119,6 +128,7 @@ export const HomePage: React.FC = () => {
     navigate,
     resetResearch,
     setPhase,
+    setProgress,
     setCurrentBundle,
     setCurrentReport,
     addToHistory,
