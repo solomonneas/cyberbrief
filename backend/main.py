@@ -21,6 +21,9 @@ from models import (
 from research.engine import run_research
 from report.generator import generate_report
 from export.markdown import export_markdown
+from export.html import export_html
+from attack.mapper import lookup_technique as attack_lookup_technique, map_techniques_from_text
+from attack.navigator import generate_navigator_layer
 
 # ─── Logging ──────────────────────────────────────────────────────────────────
 
@@ -125,12 +128,15 @@ async def attack_lookup(q: str = Query(..., description="Technique name or ID to
     """
     Look up MITRE ATT&CK techniques by name or ID.
 
-    Stub implementation — returns empty results for now.
-    Full implementation will query a local ATT&CK STIX dataset.
+    Queries the local enterprise ATT&CK dataset by T-code or keyword.
     """
     logger.info("ATT&CK lookup query: %s", q)
-    # Stub: return empty list until ATT&CK data integration
-    return []
+    try:
+        results = attack_lookup_technique(q)
+        return [t.model_dump(by_alias=True) for t in results]
+    except Exception as exc:
+        logger.exception("ATT&CK lookup failed for query: %s", q)
+        raise HTTPException(status_code=500, detail=f"ATT&CK lookup failed: {exc}")
 
 
 @app.post("/api/attack/navigator")
@@ -138,43 +144,13 @@ async def attack_navigator(request: NavigatorRequest) -> dict:
     """
     Generate an ATT&CK Navigator layer JSON from a list of techniques.
 
-    Stub implementation — returns a minimal valid Navigator layer.
+    Returns a fully compliant Navigator layer importable at
+    https://mitre-attack.github.io/attack-navigator/
     """
     techniques = request.techniques
-    layer = {
-        "name": "CyberBRIEF Report Layer",
-        "versions": {
-            "attack": "14",
-            "navigator": "4.9.1",
-            "layer": "4.5",
-        },
-        "domain": "enterprise-attack",
-        "description": "Auto-generated from CyberBRIEF report",
-        "sorting": 0,
-        "layout": {
-            "layout": "side",
-            "aggregateFunction": "average",
-            "showID": True,
-            "showName": True,
-        },
-        "hideDisabled": False,
-        "techniques": [
-            {
-                "techniqueID": t.technique_id,
-                "tactic": t.tactic.lower().replace(" ", "-"),
-                "color": "#e60d0d",
-                "comment": t.description,
-                "enabled": True,
-                "score": 100,
-            }
-            for t in techniques
-        ],
-        "gradient": {
-            "colors": ["#ffffff", "#e60d0d"],
-            "minValue": 0,
-            "maxValue": 100,
-        },
-    }
+    # Derive topic from first technique or default
+    topic = "CyberBRIEF Report"
+    layer = generate_navigator_layer(techniques, topic)
     return layer
 
 
@@ -196,6 +172,23 @@ async def export_markdown_endpoint(report_data: dict) -> PlainTextResponse:
     except Exception as exc:
         logger.exception("Markdown export failed")
         raise HTTPException(status_code=500, detail=f"Markdown export failed: {exc}")
+
+
+@app.post("/api/export/html")
+async def export_html_endpoint(report_data: dict) -> PlainTextResponse:
+    """
+    Export a report as a self-contained HTML page.
+
+    Accepts the full report JSON and returns HTML with inline CSS,
+    dark theme, TLP banners, all sections, and print-friendly styles.
+    """
+    try:
+        report = Report.model_validate(report_data)
+        html_content = export_html(report)
+        return PlainTextResponse(content=html_content, media_type="text/html")
+    except Exception as exc:
+        logger.exception("HTML export failed")
+        raise HTTPException(status_code=500, detail=f"HTML export failed: {exc}")
 
 
 @app.post("/api/export/pdf")

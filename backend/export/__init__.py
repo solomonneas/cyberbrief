@@ -1,1 +1,1 @@
-"""Export modules — PDF, Markdown output."""
+"""Export modules — HTML, Markdown, and PDF output."""
