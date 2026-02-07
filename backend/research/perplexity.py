@@ -215,8 +215,10 @@ def _parse_response(raw: dict, tier: ResearchTier) -> ResearchBundle:
     techniques = []
     for tech in data.get("techniques", []):
         try:
+            # Perplexity returns "id", model expects "technique_id" (alias "techniqueId")
+            tech_id = tech.get("technique_id") or tech.get("id", "")
             techniques.append(AttackTechnique(
-                id=tech.get("id", ""),
+                technique_id=tech_id,
                 name=tech.get("name", ""),
                 tactic=tech.get("tactic", ""),
                 description=tech.get("description", ""),
@@ -237,6 +239,11 @@ def _parse_response(raw: dict, tier: ResearchTier) -> ResearchBundle:
         for i, sr in enumerate(search_results)
         if sr.url
     ]
+
+    logger.info(
+        "Parsed Perplexity response: %d search_results, %d sources, %d IOCs, %d techniques",
+        len(search_results), len(sources), len(iocs), len(techniques),
+    )
 
     return ResearchBundle(
         topic="",
