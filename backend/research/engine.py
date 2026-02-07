@@ -9,7 +9,7 @@ from typing import Optional
 from models import ResearchBundle, ResearchTier, ResearchMetadata, ApiKeys
 from research.brave import search_brave
 from research.gemini import synthesize_gemini
-from research.perplexity import search_perplexity_sonar, deep_research_perplexity
+from research.perplexity import search_perplexity_sonar, deep_research_perplexity, PerplexityNotAvailable
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ async def run_research(
 
     Raises:
         ValueError: On missing keys or invalid tier.
-        NotImplementedError: For STANDARD/DEEP tiers.
+        PerplexityNotAvailable: For STANDARD/DEEP tiers (not yet implemented).
     """
     if isinstance(tier, str):
         tier = ResearchTier(tier)
@@ -41,16 +41,19 @@ async def run_research(
 
     if tier == ResearchTier.FREE:
         return await _run_free_tier(topic, api_keys, total_start)
-    elif tier == ResearchTier.STANDARD:
+    elif tier in (ResearchTier.STANDARD, ResearchTier.DEEP):
         key = api_keys.perplexity if api_keys else None
         if not key:
-            raise ValueError("Perplexity API key required for STANDARD tier.")
-        return await search_perplexity_sonar(topic, key)
-    elif tier == ResearchTier.DEEP:
-        key = api_keys.perplexity if api_keys else None
-        if not key:
-            raise ValueError("Perplexity API key required for DEEP tier.")
-        return await deep_research_perplexity(topic, key)
+            raise ValueError(
+                "Perplexity API key required for Standard/Deep tier. "
+                "Add your key in Settings or use the Free tier."
+            )
+        # Perplexity integration is stubbed — PerplexityNotAvailable
+        # propagates to the API layer for a clean 501 response.
+        if tier == ResearchTier.STANDARD:
+            return await search_perplexity_sonar(topic, key)
+        else:
+            return await deep_research_perplexity(topic, key)
     else:
         raise ValueError(f"Unknown research tier: {tier}")
 

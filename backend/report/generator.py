@@ -27,11 +27,13 @@ from models import (
 )
 from report.chicago_formatter import (
     format_footnote,
+    format_short_note,
     format_bibliography_entry,
     format_sources_as_bibliography,
     format_sources_as_endnotes,
 )
 from report.ioc_extractor import extract_iocs
+from attack.mapper import map_techniques_from_text, lookup_technique, enrich_attack_mapping
 
 logger = logging.getLogger(__name__)
 
@@ -79,36 +81,131 @@ def _assess_confidence(
 
 def _build_bluf(topic: str, content: str, source_count: int) -> str:
     """
-    Generate a BLUF (Bottom Line Up Front) following the style guide.
+    Generate a BLUF (Bottom Line Up Front) following the BLUF_STYLE_GUIDE.md.
 
-    Template: "We assess that [outcome] is [likely/unlikely, timeframe]
-    because [drivers]."
+    Structure:
+    1. Bottom line (1-2 sentences with timeframe + confidence)
+    2. Why (2-4 key drivers/evidence)
+    3. Implications/so-what
+    4. Indicators to watch
     """
-    # Determine likelihood language based on source convergence
+    # Determine confidence and timeframe based on source convergence
     if source_count >= 5:
-        likelihood = "likely in the near-term (0–3 months)"
+        timeframe = "near-term (0–3 months)"
         confidence_tag = "High"
+        confidence_reason = (
+            f"convergent reporting across {source_count} sources "
+            "with consistent findings from multiple vendors"
+        )
     elif source_count >= 3:
-        likelihood = "likely within the mid-term (3–12 months)"
+        timeframe = "mid-term (3–12 months)"
         confidence_tag = "Moderate"
+        confidence_reason = (
+            f"{source_count} sources provide partial corroboration; "
+            "some gaps in independent verification remain"
+        )
     else:
-        likelihood = "possible but unconfirmed in the near-term"
+        timeframe = "near-term"
         confidence_tag = "Low"
+        confidence_reason = (
+            f"limited to {source_count} source(s); insufficient "
+            "independent corroboration"
+        )
 
-    # Extract first substantive sentence from synthesized content for drivers
+    # Extract substantive sentences for drivers, implications, and indicators
     sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', content) if len(s.strip()) > 30]
-    driver_sentence = sentences[0] if sentences else "available open-source reporting"
 
-    # Truncate driver to reasonable length
-    if len(driver_sentence) > 200:
-        driver_sentence = driver_sentence[:197] + "..."
+    # Classify sentences into categories by keyword heuristics
+    driver_sentences: list[str] = []
+    implication_sentences: list[str] = []
+    indicator_sentences: list[str] = []
 
-    bluf = (
-        f"We assess that threats related to {topic} are {likelihood} "
-        f"because {driver_sentence.lower() if not driver_sentence[0].isupper() else driver_sentence[0].lower() + driver_sentence[1:]} "
-        f"Confidence: {confidence_tag}."
+    for s in sentences:
+        s_lower = s.lower()
+        if any(kw in s_lower for kw in [
+            "because", "due to", "driven by", "result of", "caused by",
+            "exploit", "vulnerab", "campaign", "attack", "target", "observed",
+            "discovered", "reported", "identified", "compromis",
+        ]):
+            driver_sentences.append(s)
+        elif any(kw in s_lower for kw in [
+            "impact", "affect", "consequence", "risk", "damage", "disrupt",
+            "significan", "critical", "operation", "business", "sector",
+            "implication", "this means", "therefore",
+        ]):
+            implication_sentences.append(s)
+        elif any(kw in s_lower for kw in [
+            "indicator", "watch", "monitor", "signal", "suggest", "if ",
+            "increase", "decrease", "escalat", "continu", "future", "expect",
+            "predict", "likely to", "trend",
+        ]):
+            indicator_sentences.append(s)
+
+    # Build drivers (2-4 key evidence points)
+    drivers = driver_sentences[:4] if driver_sentences else sentences[:3]
+    driver_text = ""
+    if drivers:
+        truncated = []
+        for d in drivers:
+            d = d.rstrip(".")
+            if len(d) > 150:
+                d = d[:147] + "..."
+            truncated.append(d)
+        driver_text = "; ".join(truncated) + "."
+
+    # Build implications
+    if implication_sentences:
+        impl = implication_sentences[0]
+        if len(impl) > 200:
+            impl = impl[:197] + "..."
+        implications_text = impl
+    else:
+        implications_text = (
+            f"Organizations in affected sectors should evaluate their exposure "
+            f"to threats related to {topic} and prioritize defensive measures."
+        )
+
+    # Build indicators to watch
+    if indicator_sentences:
+        ind = indicator_sentences[0]
+        if len(ind) > 200:
+            ind = ind[:197] + "..."
+        indicators_text = ind
+    else:
+        indicators_text = (
+            f"Increased targeting activity, new exploit disclosures, "
+            f"or additional vendor reporting would raise confidence in this assessment."
+        )
+
+    # Assemble the full BLUF per style guide
+    parts = []
+
+    # 1. Bottom line with timeframe + confidence
+    parts.append(
+        f"We assess that threats related to {topic} are likely to persist "
+        f"in the {timeframe}."
     )
-    return bluf
+
+    # 2. Key drivers
+    if driver_text:
+        parts.append(f"\n\nKey drivers: {driver_text}")
+    else:
+        parts.append(
+            f"\n\nKey drivers: available open-source reporting indicates "
+            f"ongoing activity related to {topic}."
+        )
+
+    # 3. Implications
+    _impl_start = implications_text[0].lower() + implications_text[1:] if implications_text and implications_text[0].isupper() else implications_text
+    parts.append(f"\n\nThis matters because {_impl_start}")
+
+    # 4. Indicators to watch
+    parts.append(f"\n\nIndicators to watch: {indicators_text}")
+
+    # 5. Confidence tag with rationale
+    parts.append(f"\n\nConfidence: {confidence_tag} — {confidence_reason}.")
+
+    return "".join(parts)
 
 
 def _extract_threat_actor(topic: str, content: str) -> ThreatActorProfile:
@@ -385,7 +482,68 @@ async def generate_report(
             )
         )
 
-    # Build the Report
+    # ── ATT&CK mapper: validate and augment techniques ─────────────────
+    llm_techniques = list(bundle.suggested_techniques)
+
+    # Find techniques in the research text that the LLM may have missed
+    text_techniques = map_techniques_from_text(bundle.synthesized_content)
+
+    # Merge: LLM techniques take priority, add any new ones from text scan
+    seen_tids: set[str] = {t.technique_id for t in llm_techniques}
+    merged_techniques = list(llm_techniques)
+    for t in text_techniques:
+        if t.technique_id not in seen_tids:
+            seen_tids.add(t.technique_id)
+            merged_techniques.append(t)
+
+    # Validate technique IDs against the local ATT&CK DB
+    validated_techniques: list[AttackTechnique] = []
+    for tech in merged_techniques:
+        matches = lookup_technique(tech.technique_id)
+        if matches:
+            # Technique ID is valid — keep it
+            validated_techniques.append(tech)
+        else:
+            logger.warning(
+                "Dropping invalid ATT&CK technique ID: %s (%s)",
+                tech.technique_id, tech.name,
+            )
+
+    # Enrich validated techniques with evidence quotes
+    enriched_techniques = enrich_attack_mapping(
+        validated_techniques, bundle.synthesized_content
+    )
+
+    # ── Chicago NB citations: footnotes and bibliography ─────────────────
+    footnotes: list[str] = []
+    bibliography: list[str] = []
+    cited_urls: set[str] = set()  # Track first-cite vs short-note
+
+    source_dicts = [
+        {
+            "title": src.title,
+            "url": src.url,
+            "accessed_at": src.accessed_at,
+            "snippet": src.snippet or "",
+        }
+        for src in bundle.sources
+    ]
+
+    # Build footnotes with first-cite / short-note logic
+    for i, src_dict in enumerate(source_dicts, start=1):
+        url = src_dict["url"]
+        if url not in cited_urls:
+            # First citation — full footnote
+            cited_urls.add(url)
+            footnotes.append(format_footnote(src_dict, i))
+        else:
+            # Subsequent citation — short note
+            footnotes.append(format_short_note(src_dict, i))
+
+    # Build bibliography entries (alphabetically sorted)
+    bibliography = format_sources_as_bibliography(source_dicts)
+
+    # ── Build the Report ─────────────────────────────────────────────────
     report = Report(
         id=report_id,
         topic=bundle.topic,
@@ -396,18 +554,24 @@ async def generate_report(
         threat_actor=threat_actor,
         sections=sections,
         iocs=unique_iocs,
-        attack_mapping=list(bundle.suggested_techniques),
+        attack_mapping=enriched_techniques,
         sources=list(bundle.sources),
+        footnotes=footnotes,
+        bibliography=bibliography,
         confidence_assessments=assessments,
     )
 
     logger.info(
-        "Generated report %s: %d sections, %d IOCs, %d techniques, %d sources",
+        "Generated report %s: %d sections, %d IOCs, %d techniques "
+        "(%d from LLM, %d from text scan), %d sources, %d footnotes",
         report_id,
         len(sections),
         len(unique_iocs),
-        len(bundle.suggested_techniques),
+        len(enriched_techniques),
+        len(llm_techniques),
+        len(text_techniques),
         len(bundle.sources),
+        len(footnotes),
     )
 
     return report

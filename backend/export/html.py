@@ -11,6 +11,10 @@ import html
 from datetime import datetime
 
 from models import Report, TLPLevel
+from report.chicago_formatter import (
+    format_footnote,
+    format_bibliography_entry,
+)
 
 
 # ─── TLP Config ───────────────────────────────────────────────────────────────
@@ -527,47 +531,49 @@ def export_html(report: Report) -> str:
             parts.append('</div>')
         parts.append('</div>')
 
-    # ── Endnotes ──────────────────────────────────────────────────────────
+    # ── Endnotes (Chicago NB formatted) ─────────────────────────────────
     parts.append('<div class="section">')
     parts.append('<h2>Endnotes</h2>')
-    if report.sources:
-        for i, src in enumerate(report.sources, start=1):
-            accessed = ""
-            try:
-                dt = datetime.fromisoformat(src.accessed_at.replace("Z", "+00:00"))
-                accessed = dt.strftime("%B %-d, %Y")
-            except (ValueError, TypeError):
-                accessed = src.accessed_at
+    if report.footnotes:
+        # Use pre-formatted Chicago NB footnotes from the generator
+        for i, note in enumerate(report.footnotes, start=1):
             parts.append(
-                f'<div class="endnote" id="endnote-{i}">'
-                f'{i}. "<a href="{_esc(src.url)}" target="_blank">{_esc(src.title)}</a>," '
-                f'accessed {_esc(accessed)}, '
-                f'<a href="{_esc(src.url)}" target="_blank">{_esc(src.url)}</a>.'
-                f'</div>'
+                f'<div class="endnote" id="endnote-{i}">{_esc(note)}</div>'
+            )
+    elif report.sources:
+        # Fallback: generate Chicago footnotes from sources on the fly
+        for i, src in enumerate(report.sources, start=1):
+            src_dict = {
+                "title": src.title,
+                "url": src.url,
+                "accessed_at": src.accessed_at,
+            }
+            note = format_footnote(src_dict, i)
+            parts.append(
+                f'<div class="endnote" id="endnote-{i}">{_esc(note)}</div>'
             )
     else:
         parts.append('<p style="color: var(--text-muted); font-size: 0.85rem;">No sources to cite.</p>')
     parts.append('</div>')
 
-    # ── Bibliography ──────────────────────────────────────────────────────
+    # ── Bibliography (Chicago NB formatted) ───────────────────────────────
     parts.append('<div class="section">')
     parts.append('<h2>Bibliography</h2>')
-    if report.sources:
+    if report.bibliography:
+        # Use pre-formatted and sorted bibliography from the generator
+        for entry in report.bibliography:
+            parts.append(f'<div class="bib-entry">{_esc(entry)}</div>')
+    elif report.sources:
+        # Fallback: generate bibliography entries from sources on the fly
         sorted_sources = sorted(report.sources, key=lambda s: s.title.lower())
         for src in sorted_sources:
-            accessed = ""
-            try:
-                dt = datetime.fromisoformat(src.accessed_at.replace("Z", "+00:00"))
-                accessed = dt.strftime("%B %-d, %Y")
-            except (ValueError, TypeError):
-                accessed = src.accessed_at
-            parts.append(
-                f'<div class="bib-entry">'
-                f'&ldquo;{_esc(src.title)}.&rdquo; '
-                f'Accessed {_esc(accessed)}. '
-                f'<a href="{_esc(src.url)}" target="_blank">{_esc(src.url)}</a>.'
-                f'</div>'
-            )
+            src_dict = {
+                "title": src.title,
+                "url": src.url,
+                "accessed_at": src.accessed_at,
+            }
+            entry = format_bibliography_entry(src_dict)
+            parts.append(f'<div class="bib-entry">{_esc(entry)}</div>')
     else:
         parts.append('<p style="color: var(--text-muted); font-size: 0.85rem;">No sources.</p>')
     parts.append('</div>')

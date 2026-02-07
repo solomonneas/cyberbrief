@@ -19,6 +19,7 @@ from models import (
     TLPLevel,
 )
 from research.engine import run_research
+from research.perplexity import PerplexityNotAvailable
 from report.generator import generate_report
 from export.markdown import export_markdown
 from export.html import export_html
@@ -43,9 +44,10 @@ app = FastAPI(
 
 # ─── CORS ─────────────────────────────────────────────────────────────────────
 
+# TODO: Update allowed origins for production deployment (e.g., your domain)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,10 +81,16 @@ async def research_endpoint(request: ResearchRequest) -> dict:
         )
         return bundle.model_dump(by_alias=True)
     except ValueError as exc:
+        # ValueError carries user-facing messages (missing keys, no results)
         raise HTTPException(status_code=400, detail=str(exc))
+    except PerplexityNotAvailable as exc:
+        raise HTTPException(status_code=501, detail=str(exc))
     except Exception as exc:
         logger.exception("Research pipeline failed for topic: %s", request.topic)
-        raise HTTPException(status_code=500, detail=f"Research failed: {exc}")
+        raise HTTPException(
+            status_code=500,
+            detail="Research pipeline encountered an internal error. Check server logs.",
+        )
 
 
 # ─── Report Generation ───────────────────────────────────────────────────────
@@ -117,7 +125,10 @@ async def report_generate_endpoint(request: ReportGenerateRequest) -> dict:
         return report.model_dump(by_alias=True)
     except Exception as exc:
         logger.exception("Report generation failed")
-        raise HTTPException(status_code=500, detail=f"Report generation failed: {exc}")
+        raise HTTPException(
+            status_code=500,
+            detail="Report generation failed. Check server logs for details.",
+        )
 
 
 # ─── ATT&CK ──────────────────────────────────────────────────────────────────
@@ -136,7 +147,10 @@ async def attack_lookup(q: str = Query(..., description="Technique name or ID to
         return [t.model_dump(by_alias=True) for t in results]
     except Exception as exc:
         logger.exception("ATT&CK lookup failed for query: %s", q)
-        raise HTTPException(status_code=500, detail=f"ATT&CK lookup failed: {exc}")
+        raise HTTPException(
+            status_code=500,
+            detail="ATT&CK lookup failed. Check server logs for details.",
+        )
 
 
 @app.post("/api/attack/navigator")
@@ -171,7 +185,10 @@ async def export_markdown_endpoint(report_data: dict) -> PlainTextResponse:
         return PlainTextResponse(content=md, media_type="text/markdown")
     except Exception as exc:
         logger.exception("Markdown export failed")
-        raise HTTPException(status_code=500, detail=f"Markdown export failed: {exc}")
+        raise HTTPException(
+            status_code=500,
+            detail="Markdown export failed. Check server logs for details.",
+        )
 
 
 @app.post("/api/export/html")
@@ -188,7 +205,10 @@ async def export_html_endpoint(report_data: dict) -> PlainTextResponse:
         return PlainTextResponse(content=html_content, media_type="text/html")
     except Exception as exc:
         logger.exception("HTML export failed")
-        raise HTTPException(status_code=500, detail=f"HTML export failed: {exc}")
+        raise HTTPException(
+            status_code=500,
+            detail="HTML export failed. Check server logs for details.",
+        )
 
 
 @app.post("/api/export/pdf")
