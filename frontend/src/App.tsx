@@ -11,6 +11,7 @@ import { ReportPage } from './pages/ReportPage';
 import { AttackPage } from './pages/AttackPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { DocsPage } from './pages/DocsPage';
 import { Variant1 } from './variants/Variant1';
 import { Variant2 } from './variants/Variant2';
 import { Variant3 } from './variants/Variant3';
@@ -32,6 +33,7 @@ const variantRoutes = (
     <Route path="attack" element={<AttackPage />} />
     <Route path="history" element={<HistoryPage />} />
     <Route path="settings" element={<SettingsPage />} />
+    <Route path="docs" element={<DocsPage />} />
     <Route index element={<Navigate to="home" replace />} />
   </>
 );

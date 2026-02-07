@@ -1,37 +1,88 @@
-# CyberBRIEF
+<div align="center">
 
-**Automated Cyber Intelligence Research Platform**
+# 🛡️ CyberBRIEF
 
-CyberBRIEF transforms a simple threat topic into a comprehensive BLUF-format intelligence report with MITRE ATT&CK mapping, IOC extraction, victimology analysis, remediation guidance, and fully-sourced citations.
+**AI-Powered Cyber Threat Intelligence Briefing Platform**
 
-## Features
+Transform any threat topic into a comprehensive BLUF-format intelligence report with MITRE ATT&CK mapping, IOC extraction, and multi-source research.
 
-- **Multi-Tier Research**: FREE (Brave + Gemini Flash), STANDARD (Perplexity Sonar), and DEEP (Perplexity Deep Research)
-- **BLUF-Format Reports**: Bottom Line Up Front intelligence briefings
-- **MITRE ATT&CK Mapping**: Automatic technique identification with Navigator layer export
-- **IOC Extraction**: Regex-based extraction of IPs, domains, hashes, CVEs, and URLs
-- **TLP Marking**: Traffic Light Protocol classification (CLEAR through RED)
-- **Confidence Assessment**: Source-based confidence scoring for each finding
-- **BYOK (Bring Your Own Key)**: Use your own API keys for all services
-- **5 Design Variants**: Multiple UI layouts to choose from
-- **Export**: PDF and Markdown report export
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-## Tech Stack
+![CyberBRIEF Dashboard](docs/screenshots/dashboard.png)
 
-### Frontend
-- React 18 + TypeScript
-- Vite (build tool)
-- Tailwind CSS (styling)
-- Zustand (state management)
-- React Router v6 (routing)
+</div>
+
+---
+
+## ✨ Features
+
+- **Multi-Source Research** — Aggregates intelligence from Brave Search, Perplexity Sonar, and Google Gemini across three research tiers (Free, Standard, Deep)
+- **BLUF-Format Reports** — Bottom Line Up Front intelligence briefings following professional CTI standards
+- **MITRE ATT&CK Mapping** — Automatic technique identification with interactive matrix explorer and Navigator layer export
+- **IOC Extraction** — Regex-based extraction of IPv4/IPv6 addresses, domains, hashes (MD5/SHA1/SHA256), CVEs, and URLs
+- **5 Visual Themes** — SOC Operator, Intelligence Agency, Threat Hunter, Academic Research, and Cyberpunk Analyst
+- **TLP Classification** — Traffic Light Protocol marking from CLEAR through RED
+- **Confidence Scoring** — Source-based confidence assessment (Low / Moderate / High) for each finding
+- **Chicago NB Citations** — Properly formatted endnotes and bibliography
+- **Export Options** — HTML and Markdown report export, plus ATT&CK Navigator JSON layers
+- **BYOK Architecture** — Bring your own API keys; credentials stored locally in-browser
+
+## 🏗️ Architecture
+
+```
+┌──────────────────────────────────────────────┐
+│           React Frontend (Vite + TS)         │
+│  Topic Input → Tier Selection → Report View  │
+│  ATT&CK Explorer · History · 5 Variants     │
+└──────────────────┬───────────────────────────┘
+                   │ HTTP / JSON
+┌──────────────────▼───────────────────────────┐
+│           FastAPI Backend (Python)            │
+│  ┌────────────┐ ┌──────────┐ ┌────────────┐  │
+│  │  Research   │ │  Report  │ │  ATT&CK    │  │
+│  │  Engine     │ │ Generator│ │  Mapper    │  │
+│  │            │ │          │ │            │  │
+│  │ Brave API  │ │ BLUF fmt │ │ Navigator  │  │
+│  │ Gemini API │ │ IOC ext  │ │ Layer JSON │  │
+│  │ Perplexity │ │ Chicago  │ │ Technique  │  │
+│  │            │ │ NB cites │ │ Lookup     │  │
+│  └────────────┘ └──────────┘ └────────────┘  │
+└──────────────────────────────────────────────┘
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js** ≥ 18 and **npm** ≥ 9
+- **Python** ≥ 3.11 and **pip**
+- API keys (optional — Free tier works with Brave + Gemini keys, or configure via Settings UI)
+
+### Clone & Install
+
+```bash
+git clone https://github.com/yourusername/cyberbrief.git
+cd cyberbrief
+```
 
 ### Backend
-- FastAPI (Python)
-- Pydantic (data validation)
-- httpx (async HTTP client)
-- uvicorn (ASGI server)
 
-## Setup
+```bash
+cd backend
+pip install -r requirements.txt
+
+# Optional: set API keys via environment
+export BRAVE_API_KEY=your_brave_key
+export GEMINI_API_KEY=your_gemini_key
+export PERPLEXITY_API_KEY=your_perplexity_key
+
+uvicorn main:app --reload --port 8000
+```
 
 ### Frontend
 
@@ -41,97 +92,81 @@ npm install
 npm run dev
 ```
 
-### Backend
+Open [http://localhost:5173](http://localhost:5173) → pick a variant → start researching.
 
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
-```
+## 🛠️ Tech Stack
 
-### Environment Variables
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **Frontend** | React 18 + TypeScript | UI components & routing |
+| **Build** | Vite | Dev server & bundling |
+| **Styling** | Tailwind CSS | Utility-first styling |
+| **State** | Zustand | Lightweight state management |
+| **Routing** | React Router v6 | SPA navigation |
+| **Backend** | FastAPI (Python) | REST API server |
+| **Validation** | Pydantic | Request/response models |
+| **HTTP** | httpx | Async API client |
+| **Server** | Uvicorn | ASGI server |
 
-```bash
-# Optional - can also be set via Settings UI (BYOK)
-BRAVE_API_KEY=your_brave_search_key
-GEMINI_API_KEY=your_gemini_key
-PERPLEXITY_API_KEY=your_perplexity_key
-```
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────┐
-│                  Frontend (React)                │
-│  ┌──────────┐ ┌──────────┐ ┌──────────────────┐ │
-│  │  Zustand  │ │  Router  │ │  5 Design Variants│ │
-│  │  Stores   │ │  (SPA)   │ │  /1 /2 /3 /4 /5  │ │
-│  └──────────┘ └──────────┘ └──────────────────┘ │
-└─────────────────────┬───────────────────────────┘
-                      │ HTTP/JSON
-┌─────────────────────▼───────────────────────────┐
-│                Backend (FastAPI)                  │
-│  ┌────────────┐ ┌────────────┐ ┌──────────────┐ │
-│  │  Research   │ │   Report   │ │   ATT&CK     │ │
-│  │  Engine     │ │  Generator │ │   Mapper     │ │
-│  ├────────────┤ ├────────────┤ ├──────────────┤ │
-│  │ Brave API  │ │ IOC Extract│ │  Navigator   │ │
-│  │ Gemini API │ │ Confidence │ │  Layer JSON  │ │
-│  │ Perplexity │ │ Sections   │ │  Lookup      │ │
-│  └────────────┘ └────────────┘ └──────────────┘ │
-└─────────────────────────────────────────────────┘
-```
-
-## Research Tiers
-
-| Tier | Source | Model | Cost |
-|------|--------|-------|------|
-| FREE | Brave Search | Gemini 2.0 Flash | Free (rate limited) |
-| STANDARD | Perplexity Sonar | Built-in | Per-query |
-| DEEP | Perplexity Deep Research | Built-in | Per-query |
-
-## API Endpoints
-
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/research` | Run research on a topic |
-| POST | `/api/report/generate` | Generate report from research |
-| GET | `/api/attack/lookup` | Look up ATT&CK technique |
-| POST | `/api/attack/navigator` | Generate Navigator layer |
-| POST | `/api/export/pdf` | Export report as PDF |
-| POST | `/api/export/markdown` | Export report as Markdown |
-| GET | `/api/health` | Health check |
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 cyberbrief/
 ├── frontend/
 │   ├── src/
-│   │   ├── components/     # Shared UI components
-│   │   ├── pages/          # Page components
-│   │   ├── stores/         # Zustand stores
+│   │   ├── api/            # API client (httpx wrapper)
+│   │   ├── components/     # Navbar, Layout, StatusBar, GuidedTour
+│   │   ├── context/        # ThemeContext (variant theming)
+│   │   ├── pages/          # HomePage, ReportPage, AttackPage, HistoryPage,
+│   │   │                   #   SettingsPage, VariantPicker, DocsPage
+│   │   ├── stores/         # Zustand stores (report, research, settings)
 │   │   ├── types/          # TypeScript type definitions
-│   │   ├── variants/       # 5 design variant shells
-│   │   ├── api/            # API client functions
-│   │   ├── App.tsx
-│   │   └── main.tsx
+│   │   └── variants/       # 5 variant shell components
 │   ├── index.html
-│   ├── package.json
-│   ├── tsconfig.json
 │   ├── tailwind.config.js
 │   └── vite.config.ts
 ├── backend/
-│   ├── main.py
-│   ├── models.py
-│   ├── research/
-│   ├── report/
-│   ├── attack/
-│   ├── export/
-│   └── requirements.txt
+│   ├── main.py             # FastAPI app & endpoints
+│   ├── models.py           # Pydantic models
+│   ├── research/           # Brave, Gemini, Perplexity engines
+│   ├── report/             # BLUF generator, IOC extractor, Chicago formatter
+│   ├── attack/             # ATT&CK mapper & Navigator layer builder
+│   └── export/             # HTML & Markdown exporters
+├── BLUF_STYLE_GUIDE.md
+├── CITATION_STYLE.md
 └── README.md
 ```
 
-## License
+## 🎨 Interface Variants
 
-Private — All rights reserved.
+| # | Name | Description |
+|---|------|-------------|
+| 1 | **SOC Operator** | Terminal-inspired dark theme with green accents, monospace fonts, and scan-line effects |
+| 2 | **Intelligence Agency** | Formal navy-and-cream palette with serif typography and classification banners |
+| 3 | **Threat Hunter** | Aggressive dark theme with red tactical accents and military-inspired styling |
+| 4 | **Academic Research** | Clean light theme with serif headings, journal-article layout, and wide margins |
+| 5 | **Cyberpunk Analyst** | Neon-soaked dark theme with cyan/magenta accents, glitch effects, and animated grid |
+
+## 📡 API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/research` | Run multi-source research on a topic |
+| `POST` | `/api/report/generate` | Generate BLUF report from research bundle |
+| `GET` | `/api/attack/lookup` | Look up ATT&CK technique by ID or name |
+| `POST` | `/api/attack/navigator` | Generate ATT&CK Navigator layer JSON |
+| `POST` | `/api/export/html` | Export report as styled HTML |
+| `POST` | `/api/export/markdown` | Export report as Markdown |
+| `GET` | `/api/health` | Health check |
+
+## 🔑 Research Tiers
+
+| Tier | Sources | Model | Cost |
+|------|---------|-------|------|
+| **Free** | Brave Search | Gemini 2.0 Flash | Free (rate-limited) |
+| **Standard** | Perplexity Sonar | Built-in | Per-query |
+| **Deep** | Perplexity Deep Research | Built-in | Per-query |
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).

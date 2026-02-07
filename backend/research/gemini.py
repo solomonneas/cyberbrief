@@ -148,41 +148,110 @@ Rules:
 
 
 def _parse_response(raw_text: str, topic: str, search_results: list[SearchResult]) -> dict:
-    """Parse the Gemini response JSON, handling common formatting issues."""
-    # Strip markdown code fences if present
-    text = raw_text.strip()
-    if text.startswith("```"):
-        # Remove opening fence
-        first_newline = text.index("\n")
-        text = text[first_newline + 1 :]
-        # Remove closing fence
-        if text.endswith("```"):
-            text = text[:-3].strip()
+    """Parse the Gemini response JSON, handling common formatting issues.
 
+    Strategies (tried in order):
+    1. Direct JSON parse
+    2. Strip markdown code fences and retry
+    3. Strip trailing commentary after last '}' and retry
+    4. Attempt partial JSON recovery (find outermost { ... })
+    5. Fall back to structured raw-text sections with parse-fallback markers
+    """
+    text = raw_text.strip()
+
+    # Strategy 1: Direct parse
     try:
         return json.loads(text)
-    except json.JSONDecodeError as e:
-        logger.error("Failed to parse Gemini response as JSON: %s", e)
-        # Return a minimal valid structure
-        return {
-            "bluf": f"Research synthesis for '{topic}' could not be fully parsed. Raw content available.",
-            "threat_actor": {
-                "name": topic,
-                "aliases": [],
-                "attribution": "Unknown",
-                "tooling": [],
-            },
-            "sections": [
-                {
-                    "id": "raw-content",
-                    "title": "Raw Research Content",
-                    "content": raw_text[:5000],
-                    "citations": [],
-                }
-            ],
-            "iocs": [],
-            "attack_techniques": [],
-        }
+    except json.JSONDecodeError:
+        pass
+
+    # Strategy 2: Strip markdown code fences
+    cleaned = text
+    if cleaned.startswith("```"):
+        try:
+            first_newline = cleaned.index("\n")
+            cleaned = cleaned[first_newline + 1:]
+        except ValueError:
+            cleaned = cleaned[3:]
+        if cleaned.endswith("```"):
+            cleaned = cleaned[:-3]
+        cleaned = cleaned.strip()
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError:
+            pass
+
+    # Strategy 3: Strip trailing commentary after last '}'
+    last_brace = cleaned.rfind("}")
+    if last_brace != -1:
+        trimmed = cleaned[: last_brace + 1].strip()
+        try:
+            return json.loads(trimmed)
+        except json.JSONDecodeError:
+            pass
+
+    # Strategy 4: Extract outermost { ... } block
+    first_brace = cleaned.find("{")
+    if first_brace != -1 and last_brace > first_brace:
+        extracted = cleaned[first_brace: last_brace + 1]
+        try:
+            return json.loads(extracted)
+        except json.JSONDecodeError as e:
+            logger.warning(
+                "Gemini JSON parse failed after all recovery attempts: %s "
+                "(first 200 chars: %s)",
+                e,
+                extracted[:200],
+            )
+
+    # Strategy 5: Structured fallback with parse-failure markers
+    logger.error(
+        "Gemini response could not be parsed as JSON. "
+        "Falling back to raw-text sections. First 500 chars: %s",
+        raw_text[:500],
+    )
+
+    # Split raw text into paragraphs and create meaningful sections
+    paragraphs = [p.strip() for p in raw_text.split("\n\n") if p.strip()]
+    fallback_sections = []
+    if paragraphs:
+        fallback_sections.append({
+            "id": "parse-fallback-overview",
+            "title": "[PARSE FALLBACK] Research Overview",
+            "content": paragraphs[0][:3000],
+            "citations": [],
+        })
+        if len(paragraphs) > 1:
+            remaining = "\n\n".join(paragraphs[1:])[:5000]
+            fallback_sections.append({
+                "id": "parse-fallback-details",
+                "title": "[PARSE FALLBACK] Additional Details",
+                "content": remaining,
+                "citations": [],
+            })
+    else:
+        fallback_sections.append({
+            "id": "parse-fallback-raw",
+            "title": "[PARSE FALLBACK] Raw Research Content",
+            "content": raw_text[:5000],
+            "citations": [],
+        })
+
+    return {
+        "bluf": (
+            f"[PARSE FALLBACK] Research synthesis for '{topic}' could not be "
+            f"fully parsed from the LLM response. Raw content is preserved below."
+        ),
+        "threat_actor": {
+            "name": topic,
+            "aliases": [],
+            "attribution": "Unknown",
+            "tooling": [],
+        },
+        "sections": fallback_sections,
+        "iocs": [],
+        "attack_techniques": [],
+    }
 
 
 async def synthesize_gemini(

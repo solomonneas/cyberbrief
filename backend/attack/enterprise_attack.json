@@ -1,0 +1,408 @@
+[
+  {
+    "techniqueId": "T1595",
+    "name": "Active Scanning",
+    "tactic": "Reconnaissance",
+    "description": "Adversaries may execute active reconnaissance scans to gather information that can be used during targeting.",
+    "url": "https://attack.mitre.org/techniques/T1595"
+  },
+  {
+    "techniqueId": "T1592",
+    "name": "Gather Victim Host Information",
+    "tactic": "Reconnaissance",
+    "description": "Adversaries may gather information about the victim's hosts that can be used during targeting.",
+    "url": "https://attack.mitre.org/techniques/T1592"
+  },
+  {
+    "techniqueId": "T1589",
+    "name": "Gather Victim Identity Information",
+    "tactic": "Reconnaissance",
+    "description": "Adversaries may gather information about the victim's identity that can be used during targeting.",
+    "url": "https://attack.mitre.org/techniques/T1589"
+  },
+  {
+    "techniqueId": "T1190",
+    "name": "Exploit Public-Facing Application",
+    "tactic": "Initial Access",
+    "description": "Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network.",
+    "url": "https://attack.mitre.org/techniques/T1190"
+  },
+  {
+    "techniqueId": "T1566",
+    "name": "Phishing",
+    "tactic": "Initial Access",
+    "description": "Adversaries may send phishing messages to gain access to victim systems.",
+    "url": "https://attack.mitre.org/techniques/T1566"
+  },
+  {
+    "techniqueId": "T1566.001",
+    "name": "Spearphishing Attachment",
+    "tactic": "Initial Access",
+    "description": "Adversaries may send spearphishing emails with a malicious attachment to gain access to victim systems.",
+    "url": "https://attack.mitre.org/techniques/T1566/001"
+  },
+  {
+    "techniqueId": "T1566.002",
+    "name": "Spearphishing Link",
+    "tactic": "Initial Access",
+    "description": "Adversaries may send spearphishing emails with a malicious link to gain access to victim systems.",
+    "url": "https://attack.mitre.org/techniques/T1566/002"
+  },
+  {
+    "techniqueId": "T1078",
+    "name": "Valid Accounts",
+    "tactic": "Initial Access",
+    "description": "Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access.",
+    "url": "https://attack.mitre.org/techniques/T1078"
+  },
+  {
+    "techniqueId": "T1189",
+    "name": "Drive-by Compromise",
+    "tactic": "Initial Access",
+    "description": "Adversaries may gain access to a system through a user visiting a website over the normal course of browsing.",
+    "url": "https://attack.mitre.org/techniques/T1189"
+  },
+  {
+    "techniqueId": "T1059",
+    "name": "Command and Scripting Interpreter",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse command and script interpreters to execute commands, scripts, or binaries.",
+    "url": "https://attack.mitre.org/techniques/T1059"
+  },
+  {
+    "techniqueId": "T1059.001",
+    "name": "PowerShell",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse PowerShell commands and scripts for execution.",
+    "url": "https://attack.mitre.org/techniques/T1059/001"
+  },
+  {
+    "techniqueId": "T1059.003",
+    "name": "Windows Command Shell",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse the Windows command shell for execution.",
+    "url": "https://attack.mitre.org/techniques/T1059/003"
+  },
+  {
+    "techniqueId": "T1203",
+    "name": "Exploitation for Client Execution",
+    "tactic": "Execution",
+    "description": "Adversaries may exploit software vulnerabilities in client applications to execute code.",
+    "url": "https://attack.mitre.org/techniques/T1203"
+  },
+  {
+    "techniqueId": "T1204",
+    "name": "User Execution",
+    "tactic": "Execution",
+    "description": "An adversary may rely upon specific actions by a user in order to gain execution.",
+    "url": "https://attack.mitre.org/techniques/T1204"
+  },
+  {
+    "techniqueId": "T1053",
+    "name": "Scheduled Task/Job",
+    "tactic": "Persistence",
+    "description": "Adversaries may abuse task scheduling functionality to facilitate initial or recurring execution of malicious code.",
+    "url": "https://attack.mitre.org/techniques/T1053"
+  },
+  {
+    "techniqueId": "T1547",
+    "name": "Boot or Logon Autostart Execution",
+    "tactic": "Persistence",
+    "description": "Adversaries may configure system settings to automatically execute a program during system boot or logon.",
+    "url": "https://attack.mitre.org/techniques/T1547"
+  },
+  {
+    "techniqueId": "T1547.001",
+    "name": "Registry Run Keys / Startup Folder",
+    "tactic": "Persistence",
+    "description": "Adversaries may achieve persistence by adding a program to a startup folder or referencing it with a Registry run key.",
+    "url": "https://attack.mitre.org/techniques/T1547/001"
+  },
+  {
+    "techniqueId": "T1136",
+    "name": "Create Account",
+    "tactic": "Persistence",
+    "description": "Adversaries may create an account to maintain access to victim systems.",
+    "url": "https://attack.mitre.org/techniques/T1136"
+  },
+  {
+    "techniqueId": "T1543",
+    "name": "Create or Modify System Process",
+    "tactic": "Persistence",
+    "description": "Adversaries may create or modify system-level processes to repeatedly execute malicious payloads as part of persistence.",
+    "url": "https://attack.mitre.org/techniques/T1543"
+  },
+  {
+    "techniqueId": "T1548",
+    "name": "Abuse Elevation Control Mechanism",
+    "tactic": "Privilege Escalation",
+    "description": "Adversaries may circumvent mechanisms designed to control elevated privileges to gain higher-level permissions.",
+    "url": "https://attack.mitre.org/techniques/T1548"
+  },
+  {
+    "techniqueId": "T1068",
+    "name": "Exploitation for Privilege Escalation",
+    "tactic": "Privilege Escalation",
+    "description": "Adversaries may exploit software vulnerabilities in an attempt to elevate privileges.",
+    "url": "https://attack.mitre.org/techniques/T1068"
+  },
+  {
+    "techniqueId": "T1027",
+    "name": "Obfuscated Files or Information",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may attempt to make an executable or file difficult to discover or analyze by encrypting, encoding, or otherwise obfuscating its contents.",
+    "url": "https://attack.mitre.org/techniques/T1027"
+  },
+  {
+    "techniqueId": "T1070",
+    "name": "Indicator Removal",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may delete or modify artifacts generated within systems to remove evidence of their presence or hinder defenses.",
+    "url": "https://attack.mitre.org/techniques/T1070"
+  },
+  {
+    "techniqueId": "T1562",
+    "name": "Impair Defenses",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may maliciously modify components of a victim environment in order to hinder or disable defensive mechanisms.",
+    "url": "https://attack.mitre.org/techniques/T1562"
+  },
+  {
+    "techniqueId": "T1036",
+    "name": "Masquerading",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may attempt to manipulate features of their artifacts to make them appear legitimate or benign to users and/or security tools.",
+    "url": "https://attack.mitre.org/techniques/T1036"
+  },
+  {
+    "techniqueId": "T1055",
+    "name": "Process Injection",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may inject code into processes in order to evade process-based defenses as well as possibly elevate privileges.",
+    "url": "https://attack.mitre.org/techniques/T1055"
+  },
+  {
+    "techniqueId": "T1110",
+    "name": "Brute Force",
+    "tactic": "Credential Access",
+    "description": "Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.",
+    "url": "https://attack.mitre.org/techniques/T1110"
+  },
+  {
+    "techniqueId": "T1003",
+    "name": "OS Credential Dumping",
+    "tactic": "Credential Access",
+    "description": "Adversaries may attempt to dump credentials to obtain account login and credential material.",
+    "url": "https://attack.mitre.org/techniques/T1003"
+  },
+  {
+    "techniqueId": "T1555",
+    "name": "Credentials from Password Stores",
+    "tactic": "Credential Access",
+    "description": "Adversaries may search for common password storage locations to obtain user credentials.",
+    "url": "https://attack.mitre.org/techniques/T1555"
+  },
+  {
+    "techniqueId": "T1556",
+    "name": "Modify Authentication Process",
+    "tactic": "Credential Access",
+    "description": "Adversaries may modify authentication mechanisms and processes to access user credentials or enable otherwise unwarranted access to accounts.",
+    "url": "https://attack.mitre.org/techniques/T1556"
+  },
+  {
+    "techniqueId": "T1087",
+    "name": "Account Discovery",
+    "tactic": "Discovery",
+    "description": "Adversaries may attempt to get a listing of valid accounts, usernames, or email addresses on a system or within a compromised environment.",
+    "url": "https://attack.mitre.org/techniques/T1087"
+  },
+  {
+    "techniqueId": "T1082",
+    "name": "System Information Discovery",
+    "tactic": "Discovery",
+    "description": "An adversary may attempt to get detailed information about the operating system and hardware.",
+    "url": "https://attack.mitre.org/techniques/T1082"
+  },
+  {
+    "techniqueId": "T1046",
+    "name": "Network Service Discovery",
+    "tactic": "Discovery",
+    "description": "Adversaries may attempt to get a listing of services running on remote hosts and local network infrastructure devices.",
+    "url": "https://attack.mitre.org/techniques/T1046"
+  },
+  {
+    "techniqueId": "T1057",
+    "name": "Process Discovery",
+    "tactic": "Discovery",
+    "description": "Adversaries may attempt to get information about running processes on a system.",
+    "url": "https://attack.mitre.org/techniques/T1057"
+  },
+  {
+    "techniqueId": "T1021",
+    "name": "Remote Services",
+    "tactic": "Lateral Movement",
+    "description": "Adversaries may use Valid Accounts to log into a service that accepts remote connections, such as telnet, SSH, and VNC.",
+    "url": "https://attack.mitre.org/techniques/T1021"
+  },
+  {
+    "techniqueId": "T1021.001",
+    "name": "Remote Desktop Protocol",
+    "tactic": "Lateral Movement",
+    "description": "Adversaries may use Valid Accounts to log into a computer using the Remote Desktop Protocol (RDP).",
+    "url": "https://attack.mitre.org/techniques/T1021/001"
+  },
+  {
+    "techniqueId": "T1570",
+    "name": "Lateral Tool Transfer",
+    "tactic": "Lateral Movement",
+    "description": "Adversaries may transfer tools or other files between systems in a compromised environment.",
+    "url": "https://attack.mitre.org/techniques/T1570"
+  },
+  {
+    "techniqueId": "T1560",
+    "name": "Archive Collected Data",
+    "tactic": "Collection",
+    "description": "An adversary may compress and/or encrypt data that is collected prior to exfiltration.",
+    "url": "https://attack.mitre.org/techniques/T1560"
+  },
+  {
+    "techniqueId": "T1114",
+    "name": "Email Collection",
+    "tactic": "Collection",
+    "description": "Adversaries may target user email to collect sensitive information.",
+    "url": "https://attack.mitre.org/techniques/T1114"
+  },
+  {
+    "techniqueId": "T1005",
+    "name": "Data from Local System",
+    "tactic": "Collection",
+    "description": "Adversaries may search local system sources, such as file systems and configuration files or local databases, to find files of interest.",
+    "url": "https://attack.mitre.org/techniques/T1005"
+  },
+  {
+    "techniqueId": "T1071",
+    "name": "Application Layer Protocol",
+    "tactic": "Command and Control",
+    "description": "Adversaries may communicate using OSI application layer protocols to avoid detection/network filtering by blending in with existing traffic.",
+    "url": "https://attack.mitre.org/techniques/T1071"
+  },
+  {
+    "techniqueId": "T1105",
+    "name": "Ingress Tool Transfer",
+    "tactic": "Command and Control",
+    "description": "Adversaries may transfer tools or other files from an external system into a compromised environment.",
+    "url": "https://attack.mitre.org/techniques/T1105"
+  },
+  {
+    "techniqueId": "T1572",
+    "name": "Protocol Tunneling",
+    "tactic": "Command and Control",
+    "description": "Adversaries may tunnel network communications to and from a victim system within a separate protocol to avoid detection/network filtering.",
+    "url": "https://attack.mitre.org/techniques/T1572"
+  },
+  {
+    "techniqueId": "T1573",
+    "name": "Encrypted Channel",
+    "tactic": "Command and Control",
+    "description": "Adversaries may employ an encryption algorithm to conceal command and control traffic.",
+    "url": "https://attack.mitre.org/techniques/T1573"
+  },
+  {
+    "techniqueId": "T1219",
+    "name": "Remote Access Software",
+    "tactic": "Command and Control",
+    "description": "An adversary may use legitimate desktop support and remote access software to establish an interactive command and control channel.",
+    "url": "https://attack.mitre.org/techniques/T1219"
+  },
+  {
+    "techniqueId": "T1048",
+    "name": "Exfiltration Over Alternative Protocol",
+    "tactic": "Exfiltration",
+    "description": "Adversaries may steal data by exfiltrating it over a different protocol than that of the existing command and control channel.",
+    "url": "https://attack.mitre.org/techniques/T1048"
+  },
+  {
+    "techniqueId": "T1041",
+    "name": "Exfiltration Over C2 Channel",
+    "tactic": "Exfiltration",
+    "description": "Adversaries may steal data by exfiltrating it over an existing command and control channel.",
+    "url": "https://attack.mitre.org/techniques/T1041"
+  },
+  {
+    "techniqueId": "T1567",
+    "name": "Exfiltration Over Web Service",
+    "tactic": "Exfiltration",
+    "description": "Adversaries may use an existing, legitimate external Web service to exfiltrate data rather than their primary command and control channel.",
+    "url": "https://attack.mitre.org/techniques/T1567"
+  },
+  {
+    "techniqueId": "T1486",
+    "name": "Data Encrypted for Impact",
+    "tactic": "Impact",
+    "description": "Adversaries may encrypt data on target systems or on large numbers of systems in a network to interrupt availability to system and network resources.",
+    "url": "https://attack.mitre.org/techniques/T1486"
+  },
+  {
+    "techniqueId": "T1490",
+    "name": "Inhibit System Recovery",
+    "tactic": "Impact",
+    "description": "Adversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system.",
+    "url": "https://attack.mitre.org/techniques/T1490"
+  },
+  {
+    "techniqueId": "T1498",
+    "name": "Network Denial of Service",
+    "tactic": "Impact",
+    "description": "Adversaries may perform Network Denial of Service (DoS) attacks to degrade or block the availability of targeted resources to users.",
+    "url": "https://attack.mitre.org/techniques/T1498"
+  },
+  {
+    "techniqueId": "T1529",
+    "name": "System Shutdown/Reboot",
+    "tactic": "Impact",
+    "description": "Adversaries may shutdown/reboot systems to interrupt access to, or aid in the destruction of, those systems.",
+    "url": "https://attack.mitre.org/techniques/T1529"
+  },
+  {
+    "techniqueId": "T1195",
+    "name": "Supply Chain Compromise",
+    "tactic": "Initial Access",
+    "description": "Adversaries may manipulate products or product delivery mechanisms prior to receipt by a final consumer for the purpose of data or system compromise.",
+    "url": "https://attack.mitre.org/techniques/T1195"
+  },
+  {
+    "techniqueId": "T1569",
+    "name": "System Services",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse system services or daemons to execute commands or programs.",
+    "url": "https://attack.mitre.org/techniques/T1569"
+  },
+  {
+    "techniqueId": "T1098",
+    "name": "Account Manipulation",
+    "tactic": "Persistence",
+    "description": "Adversaries may manipulate accounts to maintain and/or elevate access to victim systems.",
+    "url": "https://attack.mitre.org/techniques/T1098"
+  },
+  {
+    "techniqueId": "T1134",
+    "name": "Access Token Manipulation",
+    "tactic": "Privilege Escalation",
+    "description": "Adversaries may modify access tokens to operate under a different user or system security context to perform actions and bypass access controls.",
+    "url": "https://attack.mitre.org/techniques/T1134"
+  },
+  {
+    "techniqueId": "T1497",
+    "name": "Virtualization/Sandbox Evasion",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may employ various means to detect and avoid virtualization and analysis environments.",
+    "url": "https://attack.mitre.org/techniques/T1497"
+  },
+  {
+    "techniqueId": "T1557",
+    "name": "Adversary-in-the-Middle",
+    "tactic": "Credential Access",
+    "description": "Adversaries may attempt to position themselves between two or more networked devices using an adversary-in-the-middle technique to support follow-on behaviors.",
+    "url": "https://attack.mitre.org/techniques/T1557"
+  }
+]

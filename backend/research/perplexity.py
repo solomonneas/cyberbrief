@@ -1,8 +1,18 @@
-"""Perplexity API integration — STANDARD and DEEP tiers (stub)."""
+"""Perplexity API integration — STANDARD and DEEP tiers (stub).
+
+These tiers are planned but not yet implemented. Functions raise
+PerplexityNotAvailable instead of generic exceptions so the API
+layer can return a clean 501 response.
+"""
 
 from __future__ import annotations
 
 from models import ResearchBundle, ResearchTier
+
+
+class PerplexityNotAvailable(Exception):
+    """Raised when a Perplexity-dependent tier is requested but not yet implemented."""
+    pass
 
 
 async def search_perplexity_sonar(
@@ -14,9 +24,8 @@ async def search_perplexity_sonar(
 
     Not yet implemented — requires Perplexity API key and STANDARD tier subscription.
     """
-    raise NotImplementedError(
-        "STANDARD tier (Perplexity Sonar) is not yet implemented. "
-        "Use FREE tier with Brave Search + Gemini Flash."
+    raise PerplexityNotAvailable(
+        "Perplexity integration coming soon. Use Free tier."
     )
 
 
@@ -29,7 +38,6 @@ async def deep_research_perplexity(
 
     Not yet implemented — requires Perplexity API key and DEEP tier subscription.
     """
-    raise NotImplementedError(
-        "DEEP tier (Perplexity Deep Research) is not yet implemented. "
-        "Use FREE tier with Brave Search + Gemini Flash."
+    raise PerplexityNotAvailable(
+        "Perplexity integration coming soon. Use Free tier."
     )
