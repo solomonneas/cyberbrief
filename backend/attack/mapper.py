@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 from pathlib import Path
 from typing import Optional
 
@@ -17,14 +18,17 @@ from models import AttackTechnique, Evidence
 
 _DATA_PATH = Path(__file__).parent / "enterprise_attack.json"
 _TECHNIQUE_DB: list[dict] = []
+_DB_LOCK = threading.Lock()
 
 
 def _load_db() -> list[dict]:
     """Lazy-load the enterprise ATT&CK technique database."""
     global _TECHNIQUE_DB
     if not _TECHNIQUE_DB:
-        with open(_DATA_PATH, "r", encoding="utf-8") as f:
-            _TECHNIQUE_DB = json.load(f)
+        with _DB_LOCK:
+            if not _TECHNIQUE_DB:
+                with open(_DATA_PATH, "r", encoding="utf-8") as f:
+                    _TECHNIQUE_DB = json.load(f)
     return _TECHNIQUE_DB
 
 

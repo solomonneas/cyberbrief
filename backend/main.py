@@ -90,7 +90,7 @@ async def research_endpoint(request: ResearchRequest) -> dict:
         raise HTTPException(
             status_code=500,
             detail="Research pipeline encountered an internal error. Check server logs.",
-        )
+        ) from exc
 
 
 # ─── Report Generation ───────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ async def report_generate_endpoint(request: ReportGenerateRequest) -> dict:
         raise HTTPException(
             status_code=500,
             detail="Report generation failed. Check server logs for details.",
-        )
+        ) from exc
 
 
 # ─── ATT&CK ──────────────────────────────────────────────────────────────────
@@ -150,7 +150,7 @@ async def attack_lookup(q: str = Query(..., description="Technique name or ID to
         raise HTTPException(
             status_code=500,
             detail="ATT&CK lookup failed. Check server logs for details.",
-        )
+        ) from exc
 
 
 @app.post("/api/attack/navigator")
@@ -188,7 +188,7 @@ async def export_markdown_endpoint(report_data: dict) -> PlainTextResponse:
         raise HTTPException(
             status_code=500,
             detail="Markdown export failed. Check server logs for details.",
-        )
+        ) from exc
 
 
 @app.post("/api/export/html")
@@ -208,11 +208,11 @@ async def export_html_endpoint(report_data: dict) -> PlainTextResponse:
         raise HTTPException(
             status_code=500,
             detail="HTML export failed. Check server logs for details.",
-        )
+        ) from exc
 
 
 @app.post("/api/export/pdf")
-async def export_pdf_endpoint(report_data: dict) -> JSONResponse:
+async def export_pdf_endpoint(_report_data: dict) -> JSONResponse:
     """
     Export a report as PDF.
 

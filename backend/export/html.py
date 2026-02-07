@@ -507,12 +507,12 @@ def export_html(report: Report) -> str:
             else:
                 evidence_html = f'<span style="color: var(--text-muted); font-size: 0.8rem;">{_esc(tech.description)}</span>'
 
-            parts.append(f'<tr>')
+            parts.append('<tr>')
             parts.append(f'<td><a class="attack-id" href="{_esc(url)}" target="_blank">{_esc(tid)}</a></td>')
             parts.append(f'<td>{_esc(tech.name)}</td>')
             parts.append(f'<td><span class="tactic-badge">{_esc(tech.tactic)}</span></td>')
             parts.append(f'<td>{evidence_html}</td>')
-            parts.append(f'</tr>')
+            parts.append('</tr>')
         parts.append('</tbody></table>')
         parts.append('</div>')
 
@@ -524,7 +524,7 @@ def export_html(report: Report) -> str:
             conf = assessment.confidence
             conf_str = conf.value if hasattr(conf, "value") else str(conf)
             conf_class = f"conf-{conf_str.lower()}"
-            parts.append(f'<div class="confidence-row">')
+            parts.append('<div class="confidence-row">')
             parts.append(f'<span class="conf-badge {conf_class}">{_esc(conf_str)}</span>')
             parts.append(f'<div><div style="color: var(--text-primary); font-size: 0.9rem;">{_esc(assessment.finding)}</div>')
             parts.append(f'<div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">{_esc(assessment.rationale)}</div></div>')

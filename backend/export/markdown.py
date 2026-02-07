@@ -209,9 +209,15 @@ def export_markdown(report: Report) -> str:
         parts.append("")
         parts.append("| Technique ID | Name | Tactic | Description |")
         parts.append("|--------------|------|--------|-------------|")
+        def _esc_md(value: object) -> str:
+            return str(value).replace("|", "\\|").replace("\n", " ")
+
         for tech in report.attack_mapping:
-            tid = tech.technique_id
-            parts.append(f"| {tid} | {tech.name} | {tech.tactic} | {tech.description} |")
+            tid = _esc_md(tech.technique_id)
+            name = _esc_md(tech.name)
+            tactic = _esc_md(tech.tactic)
+            desc = _esc_md(tech.description)
+            parts.append(f"| {tid} | {name} | {tactic} | {desc} |")
         parts.append("")
 
     # ── Confidence Assessments ────────────────────────────────────────────
