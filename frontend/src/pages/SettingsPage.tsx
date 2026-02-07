@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSettingsStore } from '../stores/settingsStore';
 import { useReportStore } from '../stores/reportStore';
+import { useGuidedTour } from '../components/GuidedTour';
 import type { ResearchTier, TLPLevel, ApiKeys } from '../types';
 
 /* ── Constants ──────────────────────────────────────────────────────────── */
@@ -87,6 +89,8 @@ const REPORT_SECTIONS = [
 ];
 
 export const SettingsPage: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     defaultTier, defaultTlp, apiKeys, enabledSections,
     setDefaultTier, setDefaultTlp, setApiKey, removeApiKey,
@@ -94,10 +98,13 @@ export const SettingsPage: React.FC = () => {
   } = useSettingsStore();
 
   const { clearHistory } = useReportStore();
+  const { startTour } = useGuidedTour();
 
   const [keyInputs, setKeyInputs] = useState<Record<string, string>>({});
   const [keyValidation, setKeyValidation] = useState<Record<string, 'valid' | 'invalid' | null>>({});
   const [clearConfirm, setClearConfirm] = useState(false);
+
+  const basePath = location.pathname.match(/^\/\d+/)?.[0] ?? '';
 
   const handleTestKey = useCallback((config: ApiKeyConfig) => {
     const value = keyInputs[config.key]?.trim();
@@ -132,9 +139,33 @@ export const SettingsPage: React.FC = () => {
     setClearConfirm(false);
   }, [resetSettings, clearHistory]);
 
+  const handleTakeTour = useCallback(() => {
+    // Navigate to home first so the tour elements are visible
+    localStorage.removeItem('cyberbrief-tour-complete');
+    navigate(`${basePath}/home`);
+    // Small delay to let the page render
+    setTimeout(() => {
+      startTour();
+    }, 500);
+  }, [basePath, navigate, startTour]);
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-100 mb-8">⚙️ Settings</h1>
+
+      {/* ── Guided Tour ─────────────────────────────────────────────── */}
+      <div className="glass-panel p-6 mb-6">
+        <h2 className="text-lg font-semibold text-gray-200 mb-2">🎓 Guided Tour</h2>
+        <p className="text-xs text-gray-500 mb-4">
+          New to CyberBRIEF? Take the interactive tour to learn how to use the platform.
+        </p>
+        <button
+          onClick={handleTakeTour}
+          className="px-4 py-2 text-sm rounded-lg bg-cyber-500/20 text-cyber-400 border border-cyber-500/30 hover:bg-cyber-500/30 font-medium transition-colors"
+        >
+          🚀 Take Tour
+        </button>
+      </div>
 
       {/* ── API Keys (BYOK) ─────────────────────────────────────────── */}
       <div className="mb-8">

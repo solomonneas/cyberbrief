@@ -11,11 +11,12 @@ import { useResearchStore } from '../stores/researchStore';
  */
 
 const NAV_ITEMS = [
-  { path: 'home', label: 'home', icon: '~' },
-  { path: 'report/latest', label: 'report', icon: '>' },
-  { path: 'attack', label: 'attack', icon: '>' },
-  { path: 'history', label: 'history', icon: '>' },
-  { path: 'settings', label: 'config', icon: '>' },
+  { path: 'home', label: 'home', icon: '~', tourId: '' },
+  { path: 'report/latest', label: 'report', icon: '>', tourId: '' },
+  { path: 'attack', label: 'attack', icon: '>', tourId: 'nav-attack' },
+  { path: 'history', label: 'history', icon: '>', tourId: '' },
+  { path: 'settings', label: 'config', icon: '>', tourId: 'nav-settings' },
+  { path: 'docs', label: 'docs', icon: '>', tourId: '' },
 ];
 
 const theme = { id: '1', name: 'SOC Operator', className: 'variant-soc' };
@@ -70,6 +71,7 @@ export const Variant1: React.FC = () => {
                         backgroundColor: isActive ? 'var(--soc-green)' : 'transparent',
                         opacity: isActive ? 1 : 0.7,
                       }}
+                      {...(item.tourId ? { 'data-tour': item.tourId } : {})}
                     >
                       <span className="text-[10px] opacity-60">{item.icon}</span> {item.label}
                     </NavLink>

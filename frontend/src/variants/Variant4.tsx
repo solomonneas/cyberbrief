@@ -11,11 +11,12 @@ import { useSettingsStore } from '../stores/settingsStore';
  */
 
 const NAV_ITEMS = [
-  { path: 'home', label: 'Home' },
-  { path: 'report/latest', label: 'Reports' },
-  { path: 'attack', label: 'ATT&CK Framework' },
-  { path: 'history', label: 'Archive' },
-  { path: 'settings', label: 'Settings' },
+  { path: 'home', label: 'Home', tourId: '' },
+  { path: 'report/latest', label: 'Reports', tourId: '' },
+  { path: 'attack', label: 'ATT&CK Framework', tourId: 'nav-attack' },
+  { path: 'history', label: 'Archive', tourId: '' },
+  { path: 'settings', label: 'Settings', tourId: 'nav-settings' },
+  { path: 'docs', label: 'Documentation', tourId: '' },
 ];
 
 const theme = { id: '4', name: 'Academic Research', className: 'variant-academic' };

@@ -12,11 +12,12 @@ import { useResearchStore } from '../stores/researchStore';
  */
 
 const NAV_ITEMS = [
-  { path: 'home', label: 'HOME', icon: '◇' },
-  { path: 'report/latest', label: 'REPORT', icon: '◆' },
-  { path: 'attack', label: 'ATT&CK', icon: '⟐' },
-  { path: 'history', label: 'HISTORY', icon: '⟁' },
-  { path: 'settings', label: 'CONFIG', icon: '⟡' },
+  { path: 'home', label: 'HOME', icon: '◇', tourId: '' },
+  { path: 'report/latest', label: 'REPORT', icon: '◆', tourId: '' },
+  { path: 'attack', label: 'ATT&CK', icon: '⟐', tourId: 'nav-attack' },
+  { path: 'history', label: 'HISTORY', icon: '⟁', tourId: '' },
+  { path: 'settings', label: 'CONFIG', icon: '⟡', tourId: 'nav-settings' },
+  { path: 'docs', label: 'DOCS', icon: '📖', tourId: '' },
 ];
 
 const theme = { id: '5', name: 'Cyberpunk Analyst', className: 'variant-cyberpunk' };

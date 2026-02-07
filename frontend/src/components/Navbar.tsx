@@ -1,12 +1,20 @@
 import React from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
-const NAV_ITEMS = [
+interface NavItem {
+  path: string;
+  label: string;
+  icon: string;
+  tourId?: string;
+}
+
+const NAV_ITEMS: NavItem[] = [
   { path: 'home', label: 'Home', icon: '🏠' },
   { path: 'report', label: 'Report View', icon: '📄' },
-  { path: 'attack', label: "ATT&CK Explorer", icon: '🎯' },
+  { path: 'attack', label: "ATT&CK Explorer", icon: '🎯', tourId: 'nav-attack' },
   { path: 'history', label: 'History', icon: '📜' },
-  { path: 'settings', label: 'Settings', icon: '⚙️' },
+  { path: 'settings', label: 'Settings', icon: '⚙️', tourId: 'nav-settings' },
+  { path: 'docs', label: 'Docs', icon: '📚' },
 ];
 
 export const Navbar: React.FC = () => {
@@ -46,6 +54,7 @@ export const Navbar: React.FC = () => {
                       : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
                   }`
                 }
+                {...(item.tourId ? { 'data-tour': item.tourId } : {})}
               >
                 <span className="text-xs">{item.icon}</span>
                 <span className="hidden md:inline">{item.label}</span>

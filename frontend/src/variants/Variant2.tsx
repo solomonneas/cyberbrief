@@ -10,11 +10,12 @@ import { useSettingsStore } from '../stores/settingsStore';
  */
 
 const NAV_ITEMS = [
-  { path: 'home', label: 'Home', icon: '⌂' },
-  { path: 'report/latest', label: 'Reports', icon: '◆' },
-  { path: 'attack', label: 'ATT&CK', icon: '◆' },
-  { path: 'history', label: 'Archive', icon: '◆' },
-  { path: 'settings', label: 'Administration', icon: '◆' },
+  { path: 'home', label: 'Home', icon: '⌂', tourId: '' },
+  { path: 'report/latest', label: 'Reports', icon: '◆', tourId: '' },
+  { path: 'attack', label: 'ATT&CK', icon: '◆', tourId: 'nav-attack' },
+  { path: 'history', label: 'Archive', icon: '◆', tourId: '' },
+  { path: 'settings', label: 'Administration', icon: '◆', tourId: 'nav-settings' },
+  { path: 'docs', label: 'Documentation', icon: '◆', tourId: '' },
 ];
 
 const theme = { id: '2', name: 'Intelligence Agency', className: 'variant-intel' };
@@ -70,6 +71,7 @@ export const Variant2: React.FC = () => {
                         color: isActive ? '#c9a84c' : '#8899aa',
                         borderBottom: isActive ? '2px solid #c9a84c' : '2px solid transparent',
                       }}
+                      {...(item.tourId ? { 'data-tour': item.tourId } : {})}
                     >
                       {item.label}
                     </NavLink>

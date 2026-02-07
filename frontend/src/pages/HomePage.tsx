@@ -4,6 +4,7 @@ import { useSettingsStore } from '../stores/settingsStore';
 import { useResearchStore } from '../stores/researchStore';
 import { useReportStore } from '../stores/reportStore';
 import { apiClient } from '../api/client';
+import { GuidedTour } from '../components/GuidedTour';
 import type { ResearchTier } from '../types';
 
 /* ── Suggested Topics ───────────────────────────────────────────────────── */
@@ -164,6 +165,9 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      {/* Guided Tour (auto-starts on first visit) */}
+      <GuidedTour />
+
       {/* Hero */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold tracking-tight mb-3">
@@ -174,7 +178,7 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* Search Input */}
-      <div className="glass-panel p-6 mb-6">
+      <div className="glass-panel p-6 mb-6" data-tour="topic-input">
         <div className="relative">
           <input
             type="text"
@@ -222,7 +226,7 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* Tier Selector Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" data-tour="tier-selector">
         {TIER_INFO.map((info) => {
           const isLocked = info.requiresKey && !hasApiKey(info.requiresKey as keyof typeof apiKeys);
           const isSelected = selectedTier === info.tier;
@@ -277,7 +281,7 @@ export const HomePage: React.FC = () => {
       )}
 
       {/* Generate Button + Progress */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-8" data-tour="generate-button">
         <button onClick={handleResearch} disabled={!canSubmit}
           className="px-8 py-3 rounded-lg bg-cyber-500 hover:bg-cyber-600 text-white font-semibold text-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed cyber-glow">
           {isLoading ? (

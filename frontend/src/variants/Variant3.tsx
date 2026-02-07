@@ -12,11 +12,12 @@ import { useResearchStore } from '../stores/researchStore';
  */
 
 const NAV_ITEMS = [
-  { path: 'home', label: 'DASHBOARD', icon: '⬡' },
-  { path: 'report/latest', label: 'INTEL REPORT', icon: '⬢' },
-  { path: 'attack', label: 'ATT&CK MAP', icon: '◈' },
-  { path: 'history', label: 'OP HISTORY', icon: '▣' },
-  { path: 'settings', label: 'SYS CONFIG', icon: '⚙' },
+  { path: 'home', label: 'DASHBOARD', icon: '⬡', tourId: '' },
+  { path: 'report/latest', label: 'INTEL REPORT', icon: '⬢', tourId: '' },
+  { path: 'attack', label: 'ATT&CK MAP', icon: '◈', tourId: 'nav-attack' },
+  { path: 'history', label: 'OP HISTORY', icon: '▣', tourId: '' },
+  { path: 'settings', label: 'SYS CONFIG', icon: '⚙', tourId: 'nav-settings' },
+  { path: 'docs', label: 'FIELD MANUAL', icon: '📋', tourId: '' },
 ];
 
 const THREAT_LEVELS = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'] as const;
