@@ -51,6 +51,7 @@ export const VariantPicker: React.FC = () => {
     <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center px-4 py-12">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-bold tracking-tight mb-4">
+          <span className="text-gray-100">Solomon's </span>
           <span className="text-cyber-500">Cyber</span>
           <span className="text-gray-100">BRIEF</span>
         </h1>
