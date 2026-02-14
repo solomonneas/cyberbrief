@@ -16,18 +16,20 @@ interface SuggestedTopic {
 }
 
 const SUGGESTED_TOPICS: SuggestedTopic[] = [
-  { label: 'APT28 Fancy Bear', category: 'APT Groups', icon: '🕵️' },
   { label: 'Volt Typhoon', category: 'APT Groups', icon: '🕵️' },
-  { label: 'Lazarus Group', category: 'APT Groups', icon: '🕵️' },
-  { label: 'SolarWinds Supply Chain', category: 'Supply Chain', icon: '🔗' },
-  { label: 'MOVEit Campaign', category: 'Supply Chain', icon: '🔗' },
-  { label: '3CX Supply Chain', category: 'Supply Chain', icon: '🔗' },
-  { label: 'LockBit Ransomware', category: 'Ransomware', icon: '💀' },
-  { label: 'Ransomware Healthcare 2025', category: 'Ransomware', icon: '💀' },
-  { label: 'BlackCat ALPHV', category: 'Ransomware', icon: '💀' },
-  { label: 'Log4Shell CVE-2021-44228', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'Citrix Bleed CVE-2023-4966', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'Ivanti Connect Secure', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'Salt Typhoon Telecom Attacks', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Lazarus Group Crypto Heists', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Midnight Blizzard (APT29)', category: 'APT Groups', icon: '🕵️' },
+  { label: '0APT Ransomware Group 2026', category: 'Ransomware', icon: '💀' },
+  { label: 'LockBit 4.0 Resurgence', category: 'Ransomware', icon: '💀' },
+  { label: 'Ransomware Healthcare 2026', category: 'Ransomware', icon: '💀' },
+  { label: 'Medusa Ransomware', category: 'Ransomware', icon: '💀' },
+  { label: 'Microsoft Feb 2026 Zero-Days', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-21527 Exchange RCE', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'Ivanti Connect Secure 2026', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'AI-Powered Phishing Campaigns', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Supply Chain APT Targeting Telecom', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Deepfake Social Engineering 2026', category: 'Supply Chain', icon: '🔗' },
 ];
 
 const CATEGORIES = ['APT Groups', 'Supply Chain', 'Ransomware', 'Vulnerabilities'] as const;
