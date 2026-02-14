@@ -54,7 +54,7 @@ export const Variant3: React.FC = () => {
           fontFamily: "'Rajdhani', 'Oswald', sans-serif",
         }}>
           {/* Brand / callsign */}
-          <NavLink to="/3/home" className="flex items-center gap-2.5 px-4 py-4 border-b" style={{ borderColor: 'var(--hunter-border)' }}>
+          <NavLink to="/home" className="flex items-center gap-2.5 px-4 py-4 border-b" style={{ borderColor: 'var(--hunter-border)' }}>
             <div className="w-8 h-8 flex items-center justify-center text-xs font-black" style={{
               backgroundColor: 'var(--hunter-red)',
               color: '#ffffff',
@@ -94,11 +94,11 @@ export const Variant3: React.FC = () => {
           {/* Nav items */}
           <div className="flex-1 py-2">
             {NAV_ITEMS.map((item) => {
-              const isActive = location.pathname.startsWith(`/3/${item.path.split('/')[0]}`);
+              const isActive = location.pathname.startsWith(`/${item.path.split('/')[0]}`);
               return (
                 <NavLink
                   key={item.path}
-                  to={`/3/${item.path}`}
+                  to={`/${item.path}`}
                   className="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold tracking-wider transition-all"
                   style={{
                     fontFamily: "'Rajdhani', 'Oswald', sans-serif",

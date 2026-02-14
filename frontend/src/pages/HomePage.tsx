@@ -108,7 +108,7 @@ export const HomePage: React.FC = () => {
     topic.trim().length > 0 &&
     !isLoading;
 
-  const basePath = location.pathname.match(/^\/\d+/)?.[0] ?? '';
+  const basePath = '';
 
   const handleResearch = useCallback(async () => {
     if (!canSubmit) return;
