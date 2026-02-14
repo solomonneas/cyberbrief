@@ -67,8 +67,8 @@ app.add_middleware(
 
 # ─── Rate Limiting ────────────────────────────────────────────────────────────
 
-RATE_LIMIT_PER_HOUR = int(os.environ.get("RATE_LIMIT_PER_HOUR", "10"))
-RATE_LIMIT_PER_DAY = int(os.environ.get("RATE_LIMIT_PER_DAY", "50"))
+RATE_LIMIT_PER_HOUR = int(os.environ.get("RATE_LIMIT_PER_HOUR", "3"))
+RATE_LIMIT_PER_DAY = int(os.environ.get("RATE_LIMIT_PER_DAY", "5"))
 _rate_hits: dict[str, list[float]] = defaultdict(list)
 
 
