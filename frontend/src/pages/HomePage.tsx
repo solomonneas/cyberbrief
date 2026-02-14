@@ -55,18 +55,6 @@ const TIER_INFO: {
   requiresKey?: string;
 }[] = [
   {
-    tier: 'FREE',
-    name: 'Free',
-    description: 'Quick threat overview',
-    features: ['Perplexity Sonar', 'IOC extraction', 'ATT&CK mapping', '10 queries/hour'],
-    icon: '🔓',
-    colorBorder: 'border-green-500/40',
-    colorBg: 'bg-green-500/5',
-    colorRing: 'ring-green-500/40',
-    colorText: 'text-green-400',
-    colorGlow: 'shadow-green-500/10',
-  },
-  {
     tier: 'STANDARD',
     name: 'Standard',
     description: 'Enhanced research depth',
@@ -102,7 +90,7 @@ export const HomePage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [topic, setTopic] = useState('');
-  const [selectedTier, setSelectedTier] = useState<ResearchTier>('FREE');
+  const [selectedTier, setSelectedTier] = useState<ResearchTier>('STANDARD');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const apiKeys = useSettingsStore((s) => s.apiKeys);
@@ -261,19 +249,7 @@ export const HomePage: React.FC = () => {
         })}
       </div>
 
-      {/* Rate Limit Display */}
-      {selectedTier === 'FREE' && (
-        <div className="text-center mb-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900/60 border border-gray-800">
-            <div className={`w-2 h-2 rounded-full ${rateLimit.remaining > 2 ? 'bg-green-500 animate-pulse' : rateLimit.remaining > 0 ? 'bg-amber-500' : 'bg-red-500'}`} />
-            <span className="text-sm text-gray-400">
-              <span className={`font-bold ${rateLimit.remaining > 2 ? 'text-green-400' : rateLimit.remaining > 0 ? 'text-amber-400' : 'text-red-400'}`}>
-                {rateLimit.remaining}/{rateLimit.limit}
-              </span>{' '}free reports remaining today
-            </span>
-          </div>
-        </div>
-      )}
+      {/* Rate limit handled server-side */}
 
       {/* Generate Button + Progress */}
       <div className="text-center mb-8" data-tour="generate-button">
