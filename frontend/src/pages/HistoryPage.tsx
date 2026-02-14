@@ -26,7 +26,7 @@ export const HistoryPage: React.FC = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const basePath = location.pathname.match(/^\/\d+/)?.[0] ?? '';
+  const basePath = '';
 
   // Filtered reports
   const filteredReports = useMemo(() => {

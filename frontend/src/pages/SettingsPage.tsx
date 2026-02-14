@@ -104,7 +104,7 @@ export const SettingsPage: React.FC = () => {
   const [keyValidation, setKeyValidation] = useState<Record<string, 'valid' | 'invalid' | null>>({});
   const [clearConfirm, setClearConfirm] = useState(false);
 
-  const basePath = location.pathname.match(/^\/\d+/)?.[0] ?? '';
+  const basePath = '';
 
   const handleTestKey = useCallback((config: ApiKeyConfig) => {
     const value = keyInputs[config.key]?.trim();
