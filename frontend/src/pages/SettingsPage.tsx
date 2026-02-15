@@ -215,7 +215,7 @@ export const SettingsPage: React.FC = () => {
       <div className="glass-panel p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-200 mb-4">Default Research Tier</h2>
         <div className="flex gap-3">
-          {TIERS.map((t) => (
+          {TIERS.filter((t) => t.value !== 'DEEP' || (apiKeys.perplexity && apiKeys.perplexity.length > 0)).map((t) => (
             <button
               key={t.value}
               onClick={() => setDefaultTier(t.value)}
@@ -227,6 +227,7 @@ export const SettingsPage: React.FC = () => {
             >{t.label}</button>
           ))}
         </div>
+        <p className="text-xs text-gray-500 mt-2">Deep Research is available when you provide your own Perplexity API key above.</p>
       </div>
 
       {/* ── Default TLP ─────────────────────────────────────────────── */}
