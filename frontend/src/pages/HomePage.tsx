@@ -92,7 +92,12 @@ export const HomePage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [topic, setTopic] = useState('');
-  const [selectedTier, setSelectedTier] = useState<ResearchTier>('STANDARD');
+  const [selectedTier, setSelectedTier] = useState<ResearchTier>(() => {
+    const saved = useSettingsStore.getState().defaultTier;
+    // Don't allow DEEP without BYOK key
+    if (saved === 'DEEP' && !useSettingsStore.getState().apiKeys.perplexity) return 'STANDARD';
+    return saved;
+  });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const apiKeys = useSettingsStore((s) => s.apiKeys);
@@ -210,9 +215,9 @@ export const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Tier Selector Cards */}
+      {/* Tier Selector Cards — Deep Research only shown with BYOK Perplexity key */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-2xl mx-auto" data-tour="tier-selector">
-        {TIER_INFO.map((info) => {
+        {TIER_INFO.filter((info) => info.tier !== 'DEEP' || hasApiKey('perplexity')).map((info) => {
           const isLocked = info.requiresKey && !hasApiKey(info.requiresKey as keyof typeof apiKeys);
           const isSelected = selectedTier === info.tier;
           return (
