@@ -99,6 +99,10 @@ export const HomePage: React.FC = () => {
     return saved;
   });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [inputMode, setInputMode] = useState<'search' | 'sources'>('search');
+  const [sourceUrls, setSourceUrls] = useState('');
+  const [sourceText, setSourceText] = useState('');
+  const [sourceFiles, setSourceFiles] = useState<{ name: string; data: string }[]>([]);
 
   const apiKeys = useSettingsStore((s) => s.apiKeys);
   const hasApiKey = useSettingsStore((s) => s.hasApiKey);
@@ -149,6 +153,77 @@ export const HomePage: React.FC = () => {
     }
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      if (file.type === 'application/pdf') {
+        reader.onload = () => {
+          const base64 = (reader.result as string).split(',')[1];
+          setSourceFiles((prev) => [...prev, { name: file.name, data: base64 }]);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        reader.onload = () => {
+          setSourceFiles((prev) => [...prev, { name: file.name, data: reader.result as string }]);
+        };
+        reader.readAsText(file);
+      }
+    });
+    e.target.value = '';
+  };
+
+  const handleSourceResearch = useCallback(async () => {
+    if (!topic.trim()) return;
+    const sources: { type: string; value: string; label?: string }[] = [];
+
+    // Parse URLs (one per line)
+    sourceUrls.split('\n').forEach((u) => {
+      const url = u.trim();
+      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        sources.push({ type: 'url', value: url });
+      }
+    });
+
+    // Raw text
+    if (sourceText.trim()) {
+      sources.push({ type: 'text', value: sourceText.trim(), label: 'Pasted text' });
+    }
+
+    // Files
+    sourceFiles.forEach((f) => {
+      const isPdf = f.name.toLowerCase().endsWith('.pdf');
+      sources.push({ type: isPdf ? 'pdf' : 'text', value: f.data, label: f.name });
+    });
+
+    if (sources.length === 0) {
+      useResearchStore.getState().setError('Add at least one source (URL, text, or file).');
+      return;
+    }
+
+    resetResearch();
+    setPhase('searching', 'Processing your sources...');
+    try {
+      setProgress(10, 'Uploading sources...');
+      const bundle = await apiClient.researchFromSources({ topic: topic.trim(), sources, apiKeys: apiKeys as Record<string, string> });
+      setCurrentBundle(bundle);
+      setProgress(50, 'Sources processed. Generating report...');
+      setPhase('generating', 'Generating intelligence report...');
+      setProgress(60, 'Structuring report sections...');
+      const report = await apiClient.generateReport({ bundle });
+      setProgress(90, 'Finalizing report...');
+      setCurrentReport(report);
+      addToHistory(report);
+      setPhase('complete', 'Report ready!');
+      setProgress(100, 'Report generated successfully.');
+      navigate(`${basePath}/report/${report.id}`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(message);
+    }
+  }, [topic, sourceUrls, sourceText, sourceFiles, apiKeys, basePath, navigate, resetResearch, setPhase, setProgress, setCurrentBundle, setCurrentReport, addToHistory, setError]);
+
   const filteredTopics = activeCategory
     ? SUGGESTED_TOPICS.filter((t) => t.category === activeCategory)
     : SUGGESTED_TOPICS;
@@ -159,15 +234,57 @@ export const HomePage: React.FC = () => {
       <GuidedTour />
 
       {/* Hero */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-8">
         <h1 className="text-4xl font-bold tracking-tight mb-3">
           <span className="text-cyber-500">Cyber</span>
           <span className="text-gray-100">BRIEF</span>
         </h1>
-        <p className="text-gray-400 text-lg">Automated cyber threat intelligence research &amp; reporting</p>
+        <p className="text-gray-400 text-lg mb-6">Automated cyber threat intelligence research &amp; reporting</p>
+
+        {/* How It Works */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-2">
+          <div className="p-4 rounded-xl border border-gray-800 bg-gray-900/30">
+            <div className="text-2xl mb-2">🔍</div>
+            <h3 className="text-sm font-semibold text-gray-200 mb-1">1. Choose a Topic</h3>
+            <p className="text-xs text-gray-500">Pick a suggested threat or type your own. Or upload your own documents and URLs for custom analysis.</p>
+          </div>
+          <div className="p-4 rounded-xl border border-gray-800 bg-gray-900/30">
+            <div className="text-2xl mb-2">⚡</div>
+            <h3 className="text-sm font-semibold text-gray-200 mb-1">2. AI Researches</h3>
+            <p className="text-xs text-gray-500">Multi-source AI pulls from threat feeds, maps ATT&CK techniques, and extracts IOCs automatically.</p>
+          </div>
+          <div className="p-4 rounded-xl border border-gray-800 bg-gray-900/30">
+            <div className="text-2xl mb-2">📋</div>
+            <h3 className="text-sm font-semibold text-gray-200 mb-1">3. Get Your BLUF</h3>
+            <p className="text-xs text-gray-500">Receive a structured intelligence brief with executive summary, IOC table, and ATT&CK mapping.</p>
+          </div>
+        </div>
+
+        {/* Quick links */}
+        <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
+          <button onClick={() => navigate('/settings')} className="hover:text-cyber-400 transition-colors flex items-center gap-1">
+            🔑 <span className="underline">Add your API keys</span>
+          </button>
+          <span className="text-gray-700">|</span>
+          <button onClick={() => navigate('/docs')} className="hover:text-cyber-400 transition-colors flex items-center gap-1">
+            📖 <span className="underline">Documentation</span>
+          </button>
+        </div>
       </div>
 
-      {/* Search Input */}
+      {/* Mode Tabs */}
+      <div className="flex justify-center gap-1 mb-4 p-1 bg-gray-900/50 rounded-lg max-w-xs mx-auto">
+        <button
+          onClick={() => setInputMode('search')}
+          className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${inputMode === 'search' ? 'bg-cyber-500/20 text-cyber-400 border border-cyber-500/30' : 'text-gray-500 hover:text-gray-300'}`}
+        >🔍 Search</button>
+        <button
+          onClick={() => setInputMode('sources')}
+          className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${inputMode === 'sources' ? 'bg-cyber-500/20 text-cyber-400 border border-cyber-500/30' : 'text-gray-500 hover:text-gray-300'}`}
+        >📄 Your Sources</button>
+      </div>
+
+      {/* Topic Input (shared by both modes) */}
       <div className="glass-panel p-6 mb-6" data-tour="topic-input">
         <div className="relative">
           <input
@@ -184,35 +301,105 @@ export const HomePage: React.FC = () => {
           )}
         </div>
 
-        {/* Category Filter Tabs */}
-        <div className="flex flex-wrap gap-2 mt-4 mb-3">
-          <button
-            onClick={() => setActiveCategory(null)}
-            className={`px-3 py-1 text-xs font-medium rounded-full border transition-all ${activeCategory === null ? 'border-cyber-500/40 bg-cyber-500/10 text-cyber-400' : 'border-gray-700 bg-gray-800/50 text-gray-500 hover:text-gray-300'}`}
-          >All</button>
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-              className={`px-3 py-1 text-xs font-medium rounded-full border transition-all ${activeCategory === cat ? 'border-cyber-500/40 bg-cyber-500/10 text-cyber-400' : 'border-gray-700 bg-gray-800/50 text-gray-500 hover:text-gray-300'}`}
-            >{cat}</button>
-          ))}
-        </div>
+        {inputMode === 'search' && (
+          <>
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap gap-2 mt-4 mb-3">
+              <button
+                onClick={() => setActiveCategory(null)}
+                className={`px-3 py-1 text-xs font-medium rounded-full border transition-all ${activeCategory === null ? 'border-cyber-500/40 bg-cyber-500/10 text-cyber-400' : 'border-gray-700 bg-gray-800/50 text-gray-500 hover:text-gray-300'}`}
+              >All</button>
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
+                  className={`px-3 py-1 text-xs font-medium rounded-full border transition-all ${activeCategory === cat ? 'border-cyber-500/40 bg-cyber-500/10 text-cyber-400' : 'border-gray-700 bg-gray-800/50 text-gray-500 hover:text-gray-300'}`}
+                >{cat}</button>
+              ))}
+            </div>
 
-        {/* Suggested Topic Chips */}
-        <div className="flex flex-wrap gap-2">
-          {filteredTopics.map((t) => (
-            <button
-              key={t.label}
-              onClick={() => setTopic(t.label)}
-              disabled={isLoading}
-              className={`px-3 py-1.5 text-sm rounded-full border transition-all disabled:opacity-50 flex items-center gap-1.5 ${CATEGORY_COLORS[t.category]}`}
-            >
-              <span className="text-xs">{t.icon}</span>
-              {t.label}
-            </button>
-          ))}
-        </div>
+            {/* Suggested Topic Chips */}
+            <div className="flex flex-wrap gap-2">
+              {filteredTopics.map((t) => (
+                <button
+                  key={t.label}
+                  onClick={() => setTopic(t.label)}
+                  disabled={isLoading}
+                  className={`px-3 py-1.5 text-sm rounded-full border transition-all disabled:opacity-50 flex items-center gap-1.5 ${CATEGORY_COLORS[t.category]}`}
+                >
+                  <span className="text-xs">{t.icon}</span>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {inputMode === 'sources' && (
+          <div className="mt-4 space-y-4">
+            <p className="text-xs text-gray-500">
+              Provide your own source material. CyberBRIEF will analyze it and generate a structured intelligence report with ATT&CK mapping and IOC extraction.
+            </p>
+
+            {/* URL Input */}
+            <div>
+              <label className="block text-xs text-gray-400 mb-1 font-medium">Source URLs (one per line)</label>
+              <textarea
+                value={sourceUrls}
+                onChange={(e) => setSourceUrls(e.target.value)}
+                placeholder={"https://example.com/threat-report\nhttps://blog.security.org/apt-analysis"}
+                disabled={isLoading}
+                rows={3}
+                className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-cyber-500/50 focus:border-cyber-500 disabled:opacity-50 resize-none font-mono"
+              />
+            </div>
+
+            {/* Text Paste */}
+            <div>
+              <label className="block text-xs text-gray-400 mb-1 font-medium">Paste raw text or report content</label>
+              <textarea
+                value={sourceText}
+                onChange={(e) => setSourceText(e.target.value)}
+                placeholder="Paste threat report text, IOC lists, advisory content..."
+                disabled={isLoading}
+                rows={4}
+                className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-cyber-500/50 focus:border-cyber-500 disabled:opacity-50 resize-none"
+              />
+            </div>
+
+            {/* File Upload */}
+            <div>
+              <label className="block text-xs text-gray-400 mb-1 font-medium">Upload files (PDF, TXT, MD)</label>
+              <div className="flex items-center gap-3">
+                <label className="px-4 py-2 text-xs font-medium rounded-lg border border-gray-700 bg-gray-800/50 text-gray-400 hover:text-gray-200 hover:border-gray-600 cursor-pointer transition-all">
+                  Choose Files
+                  <input
+                    type="file"
+                    accept=".pdf,.txt,.md,.csv"
+                    multiple
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    disabled={isLoading}
+                  />
+                </label>
+                {sourceFiles.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {sourceFiles.map((f, i) => (
+                      <span key={i} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-md bg-gray-800 border border-gray-700 text-gray-300">
+                        📎 {f.name}
+                        <button onClick={() => setSourceFiles((prev) => prev.filter((_, j) => j !== i))} className="text-gray-500 hover:text-red-400 ml-1">✕</button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/20 text-xs text-blue-300/80">
+              <strong>Tip:</strong> Sources are processed server-side. URLs are fetched and parsed, text is analyzed directly, and PDFs are extracted for content. Up to 20 sources per request.
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Tier Selector Cards — Deep Research only shown with BYOK Perplexity key */}
@@ -260,7 +447,7 @@ export const HomePage: React.FC = () => {
 
       {/* Generate Button + Progress */}
       <div className="text-center mb-8" data-tour="generate-button">
-        <button onClick={handleResearch} disabled={!canSubmit}
+        <button onClick={inputMode === 'sources' ? handleSourceResearch : handleResearch} disabled={!canSubmit}
           className="px-8 py-3 rounded-lg bg-cyber-500 hover:bg-cyber-600 text-white font-semibold text-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed cyber-glow">
           {isLoading ? (
             <span className="flex items-center gap-2">

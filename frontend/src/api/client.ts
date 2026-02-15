@@ -48,6 +48,21 @@ class ApiClient {
     });
   }
 
+  async researchFromSources(params: {
+    topic: string;
+    sources: { type: string; value: string; label?: string }[];
+    apiKeys?: Record<string, string>;
+  }): Promise<ResearchBundle> {
+    return this.request<ResearchBundle>('/research/from-sources', {
+      method: 'POST',
+      body: JSON.stringify({
+        topic: params.topic,
+        sources: params.sources,
+        api_keys: params.apiKeys,
+      }),
+    });
+  }
+
   async generateReport(request: ReportGenerateRequest): Promise<Report> {
     return this.request<Report>('/report/generate', {
       method: 'POST',
