@@ -16,20 +16,20 @@ interface SuggestedTopic {
 }
 
 const SUGGESTED_TOPICS: SuggestedTopic[] = [
-  { label: 'APT41 Silver Dragon govt intrusions via Google Drive C2', category: 'APT Groups', icon: '🕵️' },
-  { label: 'MuddyWater Dindoor backdoor targeting U.S. networks', category: 'APT Groups', icon: '🕵️' },
-  { label: 'APT28 BadPaw + MeowMeow campaign against Ukraine', category: 'APT Groups', icon: '🕵️' },
-  { label: 'China-linked telecom campaign using TernDoor / PeerTime / BruteEntry', category: 'APT Groups', icon: '🕵️' },
-  { label: 'Open-source package maintainer account hijacks (npm ecosystem)', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Chrome extension supply chain backdoor campaigns in enterprises', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Third-party vendor breach cascade (shadow layer impact)', category: 'Supply Chain', icon: '🔗' },
-  { label: '0APT surge in weekly victim disclosures', category: 'Ransomware', icon: '💀' },
-  { label: 'Qilin ransomware victim spike and extortion activity', category: 'Ransomware', icon: '💀' },
-  { label: 'Play ransomware leak-site pressure campaigns', category: 'Ransomware', icon: '💀' },
-  { label: 'CVE-2026-22719 VMware Aria Operations (KEV, active exploitation)', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-21385 Qualcomm Android component (KEV, exploited)', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2017-7921 Hikvision camera flaw added to KEV', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2021-22681 Rockwell Automation flaw added to KEV', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'APT28 BEARDSHELL + COVENANT surveillance of Ukrainian military', category: 'APT Groups', icon: '🕵️' },
+  { label: 'APT28 Operation MacroMaze webhook-based macro malware in Europe', category: 'APT Groups', icon: '🕵️' },
+  { label: 'MuddyWater Dindoor backdoor intrusions across U.S. networks', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Laundry Bear DRILLAPP espionage abusing Microsoft Edge debugging', category: 'APT Groups', icon: '🕵️' },
+  { label: 'GlassWorm campaign abusing 72 malicious Open VSX extensions', category: 'Supply Chain', icon: '🔗' },
+  { label: 'UNC6426 exploiting nx npm breach for AWS admin takeover', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Malicious Rust crates chrono_anchor + time-sync exfiltrating .env secrets', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Hive0163 using AI-assisted Slopoly in Interlock ransomware attacks', category: 'Ransomware', icon: '💀' },
+  { label: 'BlackCat (ALPHV) negotiator-affiliate insider extortion conspiracy', category: 'Ransomware', icon: '💀' },
+  { label: 'Handala attack on Stryker with wipe-and-extortion pressure', category: 'Ransomware', icon: '💀' },
+  { label: 'CVE-2025-68613 n8n workflow expression RCE (KEV, exploited)', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-20122 Cisco SD-WAN Manager file overwrite (exploited)', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-20128 Cisco SD-WAN Manager privilege escalation (exploited)', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2025-26399 SolarWinds Web Help Desk deserialization (KEV)', category: 'Vulnerabilities', icon: '🐛' },
 ];
 
 const CATEGORIES = ['APT Groups', 'Supply Chain', 'Ransomware', 'Vulnerabilities'] as const;
