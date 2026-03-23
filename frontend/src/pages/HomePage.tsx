@@ -16,20 +16,20 @@ interface SuggestedTopic {
 }
 
 const SUGGESTED_TOPICS: SuggestedTopic[] = [
-  { label: 'APT28 BEARDSHELL + COVENANT surveillance of Ukrainian military', category: 'APT Groups', icon: '🕵️' },
-  { label: 'APT28 Operation MacroMaze webhook-based macro malware in Europe', category: 'APT Groups', icon: '🕵️' },
-  { label: 'MuddyWater Dindoor backdoor intrusions across U.S. networks', category: 'APT Groups', icon: '🕵️' },
-  { label: 'Laundry Bear DRILLAPP espionage abusing Microsoft Edge debugging', category: 'APT Groups', icon: '🕵️' },
-  { label: 'GlassWorm campaign abusing 72 malicious Open VSX extensions', category: 'Supply Chain', icon: '🔗' },
-  { label: 'UNC6426 exploiting nx npm breach for AWS admin takeover', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Malicious Rust crates chrono_anchor + time-sync exfiltrating .env secrets', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Hive0163 using AI-assisted Slopoly in Interlock ransomware attacks', category: 'Ransomware', icon: '💀' },
-  { label: 'BlackCat (ALPHV) negotiator-affiliate insider extortion conspiracy', category: 'Ransomware', icon: '💀' },
-  { label: 'Handala attack on Stryker with wipe-and-extortion pressure', category: 'Ransomware', icon: '💀' },
-  { label: 'CVE-2025-68613 n8n workflow expression RCE (KEV, exploited)', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-20122 Cisco SD-WAN Manager file overwrite (exploited)', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-20128 Cisco SD-WAN Manager privilege escalation (exploited)', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2025-26399 SolarWinds Web Help Desk deserialization (KEV)', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'MuddyWater GhostBackDoor + Nuso campaign against UAE energy and maritime targets', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Laundry Bear DRILLAPP espionage abusing Microsoft Edge debugging against Ukraine', category: 'APT Groups', icon: '🕵️' },
+  { label: 'DarkSword iOS exploit kit deploying GHOSTBLADE, GHOSTKNIFE, and GHOSTSABER', category: 'APT Groups', icon: '🕵️' },
+  { label: 'MuddyWater exploitation of Laravel Livewire CVE-2025-54068 for intrusion access', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Trivy GitHub Actions tag hijack poisoning aquasecurity/trivy-action and setup-trivy', category: 'Supply Chain', icon: '🔗' },
+  { label: 'TeamPCP CanisterWorm self-propagating compromise across 47 npm packages', category: 'Supply Chain', icon: '🔗' },
+  { label: 'GlassWorm ForceMemo stolen GitHub tokens injecting malware into Python repos', category: 'Supply Chain', icon: '🔗' },
+  { label: 'ForceMemo malicious npm releases of react-native-international-phone-number and react-native-country-select', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Interlock ransomware exploiting Cisco FMC zero-day CVE-2026-20131 for root access', category: 'Ransomware', icon: '💀' },
+  { label: 'The Gentlemen RaaS using FortiGate CVE-2024-55591 and brute-forced VPN creds', category: 'Ransomware', icon: '💀' },
+  { label: 'LeakNet ransomware using ClickFix and Deno in-memory loaders via hacked sites', category: 'Ransomware', icon: '💀' },
+  { label: 'CVE-2026-33017 Langflow unauthenticated RCE exploited within 20 hours', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2025-32975 Quest KACE SMA auth bypass with active admin takeover', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-20963 Microsoft SharePoint RCE under active exploitation', category: 'Vulnerabilities', icon: '🐛' },
 ];
 
 const CATEGORIES = ['APT Groups', 'Supply Chain', 'Ransomware', 'Vulnerabilities'] as const;
