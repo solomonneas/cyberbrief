@@ -16,20 +16,20 @@ interface SuggestedTopic {
 }
 
 const SUGGESTED_TOPICS: SuggestedTopic[] = [
-  { label: 'APT28 PRISMEX spear-phishing campaign targeting Ukraine and NATO allies', category: 'APT Groups', icon: '🕵️' },
-  { label: 'APT28 FrostArmada DNS-hijack campaign abusing MikroTik and TP-Link routers to steal Microsoft 365 credentials', category: 'APT Groups', icon: '🕵️' },
-  { label: 'APT37 Facebook social-engineering campaign delivering RokRAT through trojanized PDFelement accounts', category: 'APT Groups', icon: '🕵️' },
-  { label: 'Iran-linked password-spraying campaign against 300+ Israeli Microsoft 365 organizations tied to Pay2Key.I2P operators', category: 'APT Groups', icon: '🕵️' },
+  { label: 'UAC-0247 data-theft campaign targeting Ukrainian clinics and government with LNK to HTA loaders', category: 'APT Groups', icon: '🕵️' },
+  { label: 'PowMix botnet campaign hitting Czech workers with randomized C2 beaconing and in-memory PowerShell loaders', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Water Hydra (DarkCasino) 2026 campaign tied to evilgrou-tech infrastructure', category: 'APT Groups', icon: '🕵️' },
+  { label: 'W3LL phishing network takedown after $20M in Microsoft 365 fraud attempts', category: 'APT Groups', icon: '🕵️' },
   { label: 'UNC1069 Axios npm supply chain attack on axios v1.14.1 and v0.30.4 delivering WAVESHAPER.V2', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Smart Slider 3 Pro v3.5.1.35 backdoored update distributed through compromised Nextend servers', category: 'Supply Chain', icon: '🔗' },
-  { label: 'TeamPCP compromise of LiteLLM PyPI versions 1.82.7 and 1.82.8 to steal developer credentials', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Qilin and Warlock ransomware BYOVD campaign disabling 300+ EDR tools with vulnerable drivers', category: 'Ransomware', icon: '💀' },
-  { label: 'Storm-1175 high-velocity exploitation chain used to deploy Medusa ransomware', category: 'Ransomware', icon: '💀' },
-  { label: 'Pay2Key.I2P relaunch linked to Fox Kitten and Mimic with 80% affiliate cuts for attacks on Iran’s enemies', category: 'Ransomware', icon: '💀' },
+  { label: 'CPUID breach serving STX RAT through trojanized CPU-Z and HWMonitor downloads', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Vercel breach tied to compromised Context.ai account and leaked customer credentials', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Payouts King ransomware using QEMU virtual machines and reverse SSH to bypass endpoint security', category: 'Ransomware', icon: '💀' },
+  { label: 'Storm-1175 high-velocity zero-day chain used to deploy Medusa ransomware', category: 'Ransomware', icon: '💀' },
+  { label: 'Pay2Key.I2P relaunch linked to Fox Kitten and Mimic with 80% affiliate cuts', category: 'Ransomware', icon: '💀' },
+  { label: 'CVE-2026-34197 Apache ActiveMQ Classic KEV-listed code injection via Jolokia API', category: 'Vulnerabilities', icon: '🐛' },
   { label: 'CVE-2026-39987 Marimo pre-auth RCE exploited within 10 hours of disclosure', category: 'Vulnerabilities', icon: '🐛' },
   { label: 'CVE-2026-34621 Adobe Acrobat Reader zero-day exploited via malicious PDFs since December 2025', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-35616 FortiClient EMS actively exploited and added to CISA KEV', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-34040 Docker authorization bypass that can expose host access', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-33032 nginx-ui MCPwn auth bypass enabling full Nginx server takeover', category: 'Vulnerabilities', icon: '🐛' },
 ];
 
 const CATEGORIES = ['APT Groups', 'Supply Chain', 'Ransomware', 'Vulnerabilities'] as const;
