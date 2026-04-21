@@ -56,37 +56,35 @@ cd frontend && npx vite build
 
 ## OpenClaw Sync Protocol
 
-An AI assistant (clawdbot) runs in OpenClaw and manages this workspace. It reads memory files on every session start. Follow this protocol so it stays in the loop about your changes.
+An AI assistant (clawdbot) runs in OpenClaw and manages this workspace. OpenClaw on Rocinante is the canonical long-term memory. Claude Code may keep local or session memory, but durable knowledge must flow back through Memory Handoffs.
 
-### After completing a task, append to:
-`~/.openclaw/workspace/memory/YYYY-MM-DD.md`
+### After completing a substantial task
 
-Use today's date. Create the file if it doesn't exist.
+If you learned anything durable, create a Memory Handoff in:
 
-### Format:
-```markdown
-## Claude Code Session - [HH:MM AM/PM EST]
-**Project:** CyberBRIEF
-**Branch:** [branch name]
-
-### What changed
-- [Bullet list of features/fixes/refactors]
-- [Files added/modified/deleted]
-
-### Decisions made
-- [Any architectural choices, tradeoffs, library picks]
-
-### Issues / TODO
-- [Anything incomplete, broken, or needing follow-up]
-
-### Git
-- [Commit hashes or "pushed to main" / "on branch X"]
+```text
+.claude/memory-handoffs/
 ```
 
-### Rules:
-1. Always write the summary. Even for small changes.
-2. Be specific about files.
-3. Note decisions and why.
-4. Don't edit MEMORY.md (clawdbot's long-term memory).
-5. Don't edit other memory/ files. Only append to today's date file.
-6. Commit and push your work.
+Use the standard format documented in:
+
+```text
+~/.openclaw/workspace/docs/claude-code-memory-handoff.md
+```
+
+### Durable knowledge includes
+- architecture decisions
+- workflow changes
+- root causes and non-obvious fixes
+- setup and environment gotchas
+- security findings
+- reusable commands and patterns
+- durable research findings
+- user preferences or working conventions
+
+### Rules
+1. Do not wait to be reminded. If the work produced durable knowledge, write the handoff automatically.
+2. Be specific. Name files, commands, errors, and the actual decision made.
+3. Do not edit `MEMORY.md` directly. OpenClaw curates long-term memory.
+4. Do not write directly into random memory files. Use the handoff path so Rocinante can ingest and route it cleanly.
+5. Commit and push your work normally. The handoff complements git history. It does not replace it.
