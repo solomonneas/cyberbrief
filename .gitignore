@@ -7,3 +7,8 @@ __pycache__/
 .env
 .env.local
 *.log
+
+# Claude Code session files (never commit)
+.claude/
+.codex/
+.learnings/
