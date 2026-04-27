@@ -1,6 +1,6 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
-/* ── driver.js type shim (loaded via CDN) ─────────────────────────────── */
+/* driver.js type shim, loaded via CDN */
 
 interface DriverStep {
   element: string;
@@ -48,15 +48,15 @@ declare global {
   }
 }
 
-/* ── Tour Steps ───────────────────────────────────────────────────────── */
+/* Tour steps */
 
 const TOUR_STEPS: DriverStep[] = [
   {
     element: '[data-tour="topic-input"]',
     popover: {
-      title: '🔍 Enter a Threat Topic',
+      title: 'Enter a threat topic',
       description:
-        'Start by typing a cyber threat topic — an APT group, vulnerability, ransomware family, or any threat you want to research. You can also click a suggested topic below.',
+        'Start by typing a cyber threat topic, such as an APT group, vulnerability, ransomware family, or any threat you want to research. You can also click a suggested topic below.',
       side: 'bottom',
       align: 'center',
     },
@@ -64,7 +64,7 @@ const TOUR_STEPS: DriverStep[] = [
   {
     element: '[data-tour="generate-button"]',
     popover: {
-      title: '🚀 Generate Your Report',
+      title: 'Generate your report',
       description:
         'Click here to launch the research pipeline. CyberBRIEF will search multiple sources, synthesize intelligence, extract IOCs, map ATT&CK techniques, and generate a full BLUF report.',
       side: 'top',
@@ -74,7 +74,7 @@ const TOUR_STEPS: DriverStep[] = [
   {
     element: '[data-tour="tier-selector"]',
     popover: {
-      title: '📊 Choose Research Tier',
+      title: 'Choose research tier',
       description:
         'Select your research depth: Standard (Perplexity Sonar) for fast, citation-backed research, or Deep Research for comprehensive multi-source analysis with full threat actor profiling.',
       side: 'top',
@@ -84,7 +84,7 @@ const TOUR_STEPS: DriverStep[] = [
   {
     element: '[data-tour="nav-attack"]',
     popover: {
-      title: '🎯 ATT&CK Explorer',
+      title: 'ATT&CK explorer',
       description:
         'Explore the MITRE ATT&CK matrix. After generating a report, observed techniques are highlighted in the interactive matrix. Click any technique for details.',
       side: 'bottom',
@@ -94,7 +94,7 @@ const TOUR_STEPS: DriverStep[] = [
   {
     element: '[data-tour="nav-settings"]',
     popover: {
-      title: '⚙️ Settings & API Keys',
+      title: 'Settings and API keys',
       description:
         'Configure your API keys (BYOK), default research tier, TLP classification, and report sections. You can also retake this tour from Settings.',
       side: 'bottom',
@@ -103,11 +103,11 @@ const TOUR_STEPS: DriverStep[] = [
   },
 ];
 
-/* ── Constants ────────────────────────────────────────────────────────── */
+/* Constants */
 
 const TOUR_COMPLETE_KEY = 'cyberbrief-tour-complete';
 
-/* ── Hook ─────────────────────────────────────────────────────────────── */
+/* Hook */
 
 export function useGuidedTour(): { startTour: () => void } {
   const driverRef = useRef<DriverInstance | null>(null);
@@ -115,7 +115,7 @@ export function useGuidedTour(): { startTour: () => void } {
   const startTour = useCallback(() => {
     const DriverClass = window.driver?.js?.driver;
     if (!DriverClass) {
-      console.warn('[GuidedTour] driver.js not loaded via CDN — skipping tour');
+      console.warn('[GuidedTour] driver.js not loaded via CDN, skipping tour');
       return;
     }
 
@@ -132,9 +132,9 @@ export function useGuidedTour(): { startTour: () => void } {
       stageRadius: 8,
       popoverClass: 'cyberbrief-tour-popover',
       showButtons: ['next', 'previous', 'close'],
-      nextBtnText: 'Next →',
-      prevBtnText: '← Back',
-      doneBtnText: 'Done ✓',
+      nextBtnText: 'Next',
+      prevBtnText: 'Back',
+      doneBtnText: 'Done',
       steps: TOUR_STEPS,
       onDestroyStarted: () => {
         localStorage.setItem(TOUR_COMPLETE_KEY, 'true');
@@ -152,23 +152,9 @@ export function useGuidedTour(): { startTour: () => void } {
   return { startTour };
 }
 
-/* ── Auto-start component ─────────────────────────────────────────────── */
+/* Manual-only tour component */
 
 export const GuidedTour: React.FC = () => {
-  const { startTour } = useGuidedTour();
-
-  useEffect(() => {
-    const completed = localStorage.getItem(TOUR_COMPLETE_KEY);
-    if (completed) return;
-
-    // Delay to let the page render before highlighting elements
-    const timer = setTimeout(() => {
-      startTour();
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, [startTour]);
-
   return null;
 };
 
