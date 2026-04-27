@@ -16,20 +16,20 @@ interface SuggestedTopic {
 }
 
 const SUGGESTED_TOPICS: SuggestedTopic[] = [
-  { label: 'UAC-0247 data-theft campaign targeting Ukrainian clinics and government with LNK to HTA loaders', category: 'APT Groups', icon: '🕵️' },
-  { label: 'PowMix botnet campaign hitting Czech workers with randomized C2 beaconing and in-memory PowerShell loaders', category: 'APT Groups', icon: '🕵️' },
-  { label: 'Water Hydra (DarkCasino) 2026 campaign tied to evilgrou-tech infrastructure', category: 'APT Groups', icon: '🕵️' },
-  { label: 'W3LL phishing network takedown after $20M in Microsoft 365 fraud attempts', category: 'APT Groups', icon: '🕵️' },
-  { label: 'UNC1069 Axios npm supply chain attack on axios v1.14.1 and v0.30.4 delivering WAVESHAPER.V2', category: 'Supply Chain', icon: '🔗' },
-  { label: 'CPUID breach serving STX RAT through trojanized CPU-Z and HWMonitor downloads', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Vercel breach tied to compromised Context.ai account and leaked customer credentials', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Payouts King ransomware using QEMU virtual machines and reverse SSH to bypass endpoint security', category: 'Ransomware', icon: '💀' },
-  { label: 'Storm-1175 high-velocity zero-day chain used to deploy Medusa ransomware', category: 'Ransomware', icon: '💀' },
-  { label: 'Pay2Key.I2P relaunch linked to Fox Kitten and Mimic with 80% affiliate cuts', category: 'Ransomware', icon: '💀' },
-  { label: 'CVE-2026-34197 Apache ActiveMQ Classic KEV-listed code injection via Jolokia API', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-39987 Marimo pre-auth RCE exploited within 10 hours of disclosure', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-34621 Adobe Acrobat Reader zero-day exploited via malicious PDFs since December 2025', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-33032 nginx-ui MCPwn auth bypass enabling full Nginx server takeover', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'GopherWhisper espionage against Mongolian government using Slack, Discord, and Outlook Graph C2', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Harvester Linux GoGra campaign targeting South Asia via fake PDFs and Outlook Graph mailbox C2', category: 'APT Groups', icon: '🕵️' },
+  { label: 'UNC6692 Teams help-desk impersonation pushing SNOWBELT and SNOWBASIN after email-bombing', category: 'APT Groups', icon: '🕵️' },
+  { label: 'UAT4356 ArcaneDoor follow-on using FIRESTARTER and LINE VIPER on Cisco Firepower appliances', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Bitwarden CLI 2026.4.0 compromise in Checkmarx campaign with bw1.js stealing GitHub and cloud secrets', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Checkmarx KICS poisoned Docker tags and VS Code extensions pulling mcpAddon.js credential stealer', category: 'Supply Chain', icon: '🔗' },
+  { label: 'Namastex npm worm hitting pgserve and @automagik/genie with self-propagating token theft', category: 'Supply Chain', icon: '🔗' },
+  { label: 'BlackFile vishing-led extortion against retail and hospitality using Salesforce and SharePoint API theft', category: 'Ransomware', icon: '💀' },
+  { label: 'Gentlemen ransomware affiliates expanding with 1,570-host SystemBC botnet-backed intrusions', category: 'Ransomware', icon: '💀' },
+  { label: 'Kyber ransomware targeting Windows and ESXi with Kyber1024-branded post-quantum extortion tooling', category: 'Ransomware', icon: '💀' },
+  { label: 'CVE-2026-34197 Apache ActiveMQ Classic code injection via exposed Jolokia endpoints under KEV exploitation', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-39987 Marimo pre-auth terminal WebSocket RCE now driving NKAbuse deployment', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-33626 LMDeploy SSRF exploited within 13 hours to hit IMDS, Redis, and internal admin surfaces', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-33825 BlueHammer Microsoft Defender LPE added to KEV after hands-on-keyboard zero-day attacks', category: 'Vulnerabilities', icon: '🐛' },
 ];
 
 const CATEGORIES = ['APT Groups', 'Supply Chain', 'Ransomware', 'Vulnerabilities'] as const;
