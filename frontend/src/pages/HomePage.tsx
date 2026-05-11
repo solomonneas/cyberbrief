@@ -16,20 +16,20 @@ interface SuggestedTopic {
 }
 
 const SUGGESTED_TOPICS: SuggestedTopic[] = [
-  { label: 'SHADOW-EARTH-053 China-aligned Exchange and IIS N-day intrusions against Asian governments and Poland using Godzilla and ShadowPad', category: 'APT Groups', icon: '🕵️' },
-  { label: 'GLITTER CARP and SEQUIN CARP phishing ICIJ journalists and Uyghur, Tibetan, Taiwanese, and Hong Kong activists', category: 'APT Groups', icon: '🕵️' },
-  { label: 'OilRig APT34 Iranian protest lure chain hiding config in Google Drive PNGs and using Telegram Bot API C2', category: 'APT Groups', icon: '🕵️' },
-  { label: 'UNC6692 email bombing and Teams help-desk impersonation deploying Snowbelt, Snowglaze, and Snowbasin', category: 'APT Groups', icon: '🕵️' },
-  { label: 'Mini Shai-Hulud SAP CAP npm compromise hitting mbt 1.2.48 and @cap-js db-service, postgres, and sqlite packages', category: 'Supply Chain', icon: '🔗' },
-  { label: 'PyTorch Lightning PyPI 2.6.2 and 2.6.3 compromise running credential stealer on import with GitHub repo poisoning', category: 'Supply Chain', icon: '🔗' },
-  { label: 'Mini Shai-Hulud intercom-client 7.0.4 and intercom/intercom-php 5.0.2 compromise via stolen publishing flow', category: 'Supply Chain', icon: '🔗' },
-  { label: 'VECT 2.0 RaaS Windows Linux ESXi locker acting as a wiper after nonce bug with TeamPCP and BreachForums affiliate push', category: 'Ransomware', icon: '💀' },
-  { label: 'The Gentlemen RaaS scaling past 320 claimed victims using SystemBC, Cobalt Strike, Mimikatz, and GPO deployment', category: 'Ransomware', icon: '💀' },
-  { label: 'Storm-1175 exploiting ConnectWise ScreenConnect CVE-2024-1708 and CVE-2024-1709 to deploy Medusa ransomware', category: 'Ransomware', icon: '💀' },
-  { label: 'CVE-2026-41940 cPanel & WHM and WP2 auth bypass via CRLF session injection added to CISA KEV', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-31431 Linux kernel Copy Fail algif_aead LPE to root added to CISA KEV for active exploitation', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-32202 Windows Shell zero-click NTLM hash leak from incomplete CVE-2026-21510 patch under active exploitation', category: 'Vulnerabilities', icon: '🐛' },
-  { label: 'CVE-2026-3844 Breeze Cache WordPress unauthenticated file upload dropping PHP webshells when local Gravatars are enabled', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'UAT-8302 China-nexus government intrusions in South America and southeastern Europe using NetDraft, CloudSorcerer, SNOWLIGHT, Deed RAT, and Draculoader', category: 'APT Groups', icon: '🕵️' },
+  { label: 'ScarCruft APT37 sqgame.net supply chain compromise deploying BirdCall on Android and Windows against ethnic Koreans in China', category: 'APT Groups', icon: '🕵️' },
+  { label: 'MuddyWater Microsoft Teams social engineering false-flag Chaos ransomware intrusion with AnyDesk, DWAgent, and custom Game.exe backdoor', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Operation HookedWing phishing campaign stealing 2,000 credentials from 500+ aviation, government, energy, logistics, and technology organizations', category: 'APT Groups', icon: '🕵️' },
+  { label: 'Checkmarx Jenkins AST plugin backdoor published to Jenkins Marketplace after TeamPCP Trivy supply chain intrusion', category: 'Supply Chain', icon: '🔗' },
+  { label: 'DAEMON Tools signed installer supply chain attack since April 8 delivering targeted backdoor from official downloads', category: 'Supply Chain', icon: '🔗' },
+  { label: 'QLNX Quasar Linux RAT stealing developer secrets from npm, PyPI, Git, AWS, Kubernetes, Docker, Vault, and env files', category: 'Supply Chain', icon: '🔗' },
+  { label: 'ZiChatBot PyPI packages abusing Zulip APIs for command and control and credential theft in Python dependency chains', category: 'Supply Chain', icon: '🔗' },
+  { label: 'The Gentlemen RaaS 2026 surge past 320 victims with SystemBC tunneling and multi-platform lockers for Windows, Linux, NAS, BSD, and ESXi', category: 'Ransomware', icon: '💀' },
+  { label: 'World Leaks Hunters International rebrand publishing 8.5TB from Mediaworks in Hungarian media extortion attack', category: 'Ransomware', icon: '💀' },
+  { label: 'Interlock Nobles County ransomware response requiring Minnesota National Guard cyber protection team support', category: 'Ransomware', icon: '💀' },
+  { label: 'CVE-2026-0300 PAN-OS User-ID Authentication Portal RCE zero-day exploited by CL-STA-1132 with Earthworm and ReverseSocks5 tunneling', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-6973 Ivanti Endpoint Manager Mobile remote code execution exploited as a zero-day with May 10 CISA deadline', category: 'Vulnerabilities', icon: '🐛' },
+  { label: 'CVE-2026-42208 BerriAI LiteLLM SQL injection exploited within 36 hours to target proxy API keys and LLM credentials', category: 'Vulnerabilities', icon: '🐛' },
 ];
 
 const CATEGORIES = ['APT Groups', 'Supply Chain', 'Ransomware', 'Vulnerabilities'] as const;
